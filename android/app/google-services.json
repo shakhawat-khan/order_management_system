@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "453515155557",
+    "project_id": "ekopii-order-management",
+    "storage_bucket": "ekopii-order-management.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453515155557:android:cdd19c97ad8712cecfce8c",
+        "android_client_info": {
+          "package_name": "com.example.order_management_system"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453515155557-tqb7egr5ivo58skctttucmvjnec3ttie.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLi4OJKOp5udHZceAOL-btstRBEzIrqk0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "453515155557-tqb7egr5ivo58skctttucmvjnec3ttie.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
