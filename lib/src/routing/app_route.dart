@@ -24,9 +24,12 @@ final GoRouter router = GoRouter(initialLocation: '/', routes: [
           builder: (context, state) => const LogIn(),
         ),
         GoRoute(
-          path: 'home',
+          path: 'home/:email',
           name: AppRoute.home.name,
-          builder: (context, state) => const HomePage(),
+          builder: (context, state) {
+            final email = state.params['email']!;
+            return HomePage(email: email);
+          },
         ),
         GoRoute(
           path: 'signupSuccessful',

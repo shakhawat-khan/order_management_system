@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:order_management_system/src/extensions/extensions.dart';
+import 'package:order_management_system/src/modules/sign_up/provider/fucntions.dart';
 
 import '../../../components/logo_ekopii.dart';
 import '../../../constants/app_sizes.dart';
@@ -52,7 +53,9 @@ class SignUp extends ConsumerWidget {
                     hintText: 'Enter your Email',
                     prefixIcon: Icon(Icons.abc),
                     labelText: 'Email'),
-                controller: ref.watch(textControllerProvider('email')),
+                controller: ref.watch(
+                  textControllerProvider('signup_email'),
+                ),
               ),
               gapH8,
               TextFormField(
@@ -82,7 +85,7 @@ class SignUp extends ConsumerWidget {
                   labelText: 'Password',
                 ),
                 controller: ref.watch(
-                  textControllerProvider('password'),
+                  textControllerProvider('signup_password'),
                 ),
               ),
               gapH16,
@@ -95,12 +98,16 @@ class SignUp extends ConsumerWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         if (formKeySignup.currentState!.validate()) {
-                          context.goNamed(AppRoute.signupSuccessful.name);
+                          signUptoFirebase(
+                              ref.watch(textControllerProvider('signup_email')),
+                              ref.watch(
+                                  textControllerProvider('signup_password')),
+                              context);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                                content:
-                                    Text('Please Enter Valid Information')),
+                              content: Text('Please Enter Valid Information'),
+                            ),
                           );
                         }
                       },

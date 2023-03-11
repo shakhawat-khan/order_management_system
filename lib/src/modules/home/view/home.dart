@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:order_management_system/src/modules/home/components/drawer.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final String email;
+  const HomePage({super.key, required this.email});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(email: email),
       appBar: AppBar(
         title: const Text('EkopII'),
       ),

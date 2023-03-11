@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:order_management_system/src/constants/app_sizes.dart';
+import 'package:order_management_system/src/modules/log_in/provider/functions.dart';
 import 'package:order_management_system/src/provider/providers.dart';
 import 'package:order_management_system/src/routing/app_route.dart';
 import 'package:order_management_system/src/utils/font_style.dart';
@@ -17,6 +19,7 @@ class LogIn extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final passwordVisible = ref.watch(passwordProvider);
+    final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -53,7 +56,7 @@ class LogIn extends ConsumerWidget {
                     hintText: 'Enter your Email',
                     prefixIcon: Icon(Icons.abc),
                     labelText: 'Email'),
-                controller: ref.watch(textControllerProvider('email')),
+                controller: ref.watch(textControllerProvider('login_email')),
               ),
               gapH8,
               TextFormField(
@@ -83,7 +86,7 @@ class LogIn extends ConsumerWidget {
                   labelText: 'Password',
                 ),
                 controller: ref.watch(
-                  textControllerProvider('password'),
+                  textControllerProvider('login_password'),
                 ),
               ),
               gapH16,
@@ -96,12 +99,19 @@ class LogIn extends ConsumerWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         if (formKeyLogin.currentState!.validate()) {
-                          context.goNamed(AppRoute.home.name);
+                          signIntoFirebase(
+                              ref.watch(textControllerProvider('login_email')),
+                              ref.watch(
+                                  textControllerProvider('login_password')),
+                              context);
+                        } else {
+                          //print(user);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content:
+                                    Text('Please Enter Valid Information')),
+                          );
                         }
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Please Enter Valid Information')),
-                        );
                       },
                       child: const Text('Get Login'),
                     ),
