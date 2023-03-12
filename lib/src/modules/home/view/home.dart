@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:order_management_system/src/modules/home/components/drawer.dart';
+import 'package:order_management_system/src/modules/order/view/order.dart';
 
 class HomePage extends StatelessWidget {
   final String email;
@@ -12,6 +13,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('EkopII'),
       ),
+      body: const OrderPage(),
     );
   }
 }

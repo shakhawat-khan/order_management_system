@@ -45,6 +45,9 @@ dependencies:
   cloud_firestore: ^4.4.3
   flutter_slidable: ^2.0.0
   firebase_auth: ^4.2.9
+  riverpod_lint: ^1.1.5
+  font_awesome_flutter: ^10.4.0
+  image_picker: ^0.8.7
 
 
 dev_dependencies:
