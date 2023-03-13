@@ -6,14 +6,21 @@ import 'package:order_management_system/src/modules/sign_up/view/sign_up.dart';
 import 'package:order_management_system/src/modules/sign_up_sccessful/signup_sccessful.dart';
 import 'package:order_management_system/src/modules/start_screen/view/start_screen.dart';
 
-enum AppRoute { startScreen, signUp, logIn, home, signupSuccessful, order }
+import '../modules/splash_screen/splash_screen.dart';
+
+enum AppRoute { splash,startScreen, signUp, logIn, home, signupSuccessful, order }
 
 final GoRouter router = GoRouter(initialLocation: '/', routes: [
   GoRoute(
       path: '/',
-      name: AppRoute.startScreen.name,
-      builder: (context, state) => const StartScreen(),
+      name: AppRoute.splash.name,
+      builder: (context, state) => const Splash(),
       routes: [
+        GoRoute(
+          path: 'start',
+          name: AppRoute.startScreen.name,
+          builder: (context, state) => const StartScreen(),
+        ),
         GoRoute(
           path: 'sign_up',
           name: AppRoute.signUp.name,

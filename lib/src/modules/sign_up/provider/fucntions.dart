@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../routing/app_route.dart';
+
+DatabaseReference ref = FirebaseDatabase.instance.ref("users");
 
 void signUptoFirebase(TextEditingController emailController,
     TextEditingController passwordController, BuildContext context) async {
@@ -15,8 +18,17 @@ void signUptoFirebase(TextEditingController emailController,
 
     if (context.mounted) {
       if (credential.additionalUserInfo!.isNewUser == true) {
-        context.goNamed(AppRoute.signupSuccessful.name);
 
+        DatabaseReference databaes = FirebaseDatabase.instance.ref("user");
+        print("the onpress call is initiated..................");
+       await  ref.set(
+          {
+            'Name': "nur",
+            'mobile':"01762957451"
+          }
+        ).then((value) {
+          context.goNamed(AppRoute.signupSuccessful.name);
+        });
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             backgroundColor: Colors.green, content: Text("sign up success")));
       }
