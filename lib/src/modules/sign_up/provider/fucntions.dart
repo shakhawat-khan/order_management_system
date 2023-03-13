@@ -19,15 +19,17 @@ void signUptoFirebase(TextEditingController emailController,
     if (context.mounted) {
       if (credential.additionalUserInfo!.isNewUser == true) {
 
-        DatabaseReference databaes = FirebaseDatabase.instance.ref("user");
-        print("the onpress call is initiated..................");
-       await  ref.set(
-          {
-            'Name': "nur",
-            'mobile':"01762957451"
-          }
+
+        DatabaseReference databaseReference = FirebaseDatabase.instance.ref("user/${credential.user?.uid}");
+        print("the onpress call is initiated..................${credential.user?.uid}");
+        await  databaseReference.set(
+            {
+              'Name': "${credential.user?.displayName}",
+              'mobile':"${credential.user?.phoneNumber}",
+
+            }
         ).then((value) {
-          context.goNamed(AppRoute.signupSuccessful.name);
+
         });
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             backgroundColor: Colors.green, content: Text("sign up success")));

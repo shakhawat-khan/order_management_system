@@ -6,18 +6,11 @@ import 'package:order_management_system/src/modules/sign_up/view/sign_up.dart';
 import 'package:order_management_system/src/modules/sign_up_sccessful/signup_sccessful.dart';
 import 'package:order_management_system/src/modules/start_screen/view/start_screen.dart';
 
+import '../modules/all_order_list/order_list.dart';
 import '../modules/splash_screen/splash_screen.dart';
 
-enum AppRoute { splash,startScreen, signUp, logIn, home, signupSuccessful, order }
-enum AppRoute {
-  startScreen,
-  signUp,
-  logIn,
-  home,
-  signupSuccessful,
-  order,
-  orderList
-}
+enum AppRoute { splash,startScreen, signUp, logIn, home, signupSuccessful, order, orderList }
+
 
 final GoRouter router = GoRouter(initialLocation: '/', routes: [
   GoRoute(

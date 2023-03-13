@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,6 +16,9 @@ void signIntoFirebase(TextEditingController emailController,
     if (context.mounted) {
       if (user != null) {
         final test = user.email.toString();
+
+
+
         context.goNamed(AppRoute.home.name, params: {'email': test});
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             backgroundColor: Colors.green, content: Text("sign up success")));
