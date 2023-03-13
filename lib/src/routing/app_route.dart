@@ -9,6 +9,15 @@ import 'package:order_management_system/src/modules/start_screen/view/start_scre
 import '../modules/splash_screen/splash_screen.dart';
 
 enum AppRoute { splash,startScreen, signUp, logIn, home, signupSuccessful, order }
+enum AppRoute {
+  startScreen,
+  signUp,
+  logIn,
+  home,
+  signupSuccessful,
+  order,
+  orderList
+}
 
 final GoRouter router = GoRouter(initialLocation: '/', routes: [
   GoRoute(
@@ -45,9 +54,15 @@ final GoRouter router = GoRouter(initialLocation: '/', routes: [
           builder: (context, state) => const SignupSuccessful(),
         ),
         GoRoute(
-          path: 'order',
-          name: AppRoute.order.name,
-          builder: (context, state) => const OrderPage(),
-        ),
+            path: 'order',
+            name: AppRoute.order.name,
+            builder: (context, state) => const OrderPage(),
+            routes: [
+              GoRoute(
+                path: 'order_list',
+                name: AppRoute.orderList.name,
+                builder: (context, state) => const OrderList(),
+              ),
+            ]),
       ]),
 ]);
