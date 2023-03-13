@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:order_management_system/src/modules/all_order_list/order_list.dart';
 import 'package:order_management_system/src/modules/home/view/home.dart';
 import 'package:order_management_system/src/modules/log_in/view/log_in.dart';
 import 'package:order_management_system/src/modules/order/view/order.dart';
@@ -6,7 +7,15 @@ import 'package:order_management_system/src/modules/sign_up/view/sign_up.dart';
 import 'package:order_management_system/src/modules/sign_up_sccessful/signup_sccessful.dart';
 import 'package:order_management_system/src/modules/start_screen/view/start_screen.dart';
 
-enum AppRoute { startScreen, signUp, logIn, home, signupSuccessful, order }
+enum AppRoute {
+  startScreen,
+  signUp,
+  logIn,
+  home,
+  signupSuccessful,
+  order,
+  orderList
+}
 
 final GoRouter router = GoRouter(initialLocation: '/', routes: [
   GoRoute(
@@ -38,9 +47,15 @@ final GoRouter router = GoRouter(initialLocation: '/', routes: [
           builder: (context, state) => const SignupSuccessful(),
         ),
         GoRoute(
-          path: 'order',
-          name: AppRoute.order.name,
-          builder: (context, state) => const OrderPage(),
-        ),
+            path: 'order',
+            name: AppRoute.order.name,
+            builder: (context, state) => const OrderPage(),
+            routes: [
+              GoRoute(
+                path: 'order_list',
+                name: AppRoute.orderList.name,
+                builder: (context, state) => const OrderList(),
+              ),
+            ]),
       ]),
 ]);
