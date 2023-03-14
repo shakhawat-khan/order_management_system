@@ -29,8 +29,9 @@ class SignUp extends ConsumerWidget {
         padding: const EdgeInsets.all(12.0),
         child: Form(
           key: formKeySignup,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
+            shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
             children: [
               const LogoEkopII(
                 height: 200,
@@ -145,7 +146,7 @@ class SignUp extends ConsumerWidget {
                     }
                     return null;
                   },
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.name,
                   controller:
                       ref.watch(textControllerProvider('signup_ownerName')),
                   decoration: const InputDecoration(
@@ -190,7 +191,8 @@ class SignUp extends ConsumerWidget {
                               ref.watch(textControllerProvider('signup_email')),
                               ref.watch(
                                   textControllerProvider('signup_password')),
-                              context);
+                              context,
+                              ref);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

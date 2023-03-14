@@ -19,7 +19,7 @@ class LogIn extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final passwordVisible = ref.watch(passwordProvider);
-    final user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,

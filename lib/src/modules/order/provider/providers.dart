@@ -4,18 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:order_management_system/src/modules/order/provider/functions.dart';
 
-final pickImageProvider =
-    NotifierProvider<CameraNotifier, File?>(CameraNotifier.new);
+final fileListProvider = StateProvider<File?>((ref) {
+  return null;
+});
 
-class CameraNotifier extends Notifier<File?> {
+final pickImageProvider =
+    NotifierProvider<CameraNotifier, List<File?>>(CameraNotifier.new);
+
+class CameraNotifier extends Notifier<List<File?>> {
   @override
   build() {
-    return null;
+    return [];
   }
 
   void pickImageGallery() async {
     final image = await pickImageFromGallery();
-    state = image;
+    state = [...state, image];
   }
 }
 

@@ -27,7 +27,12 @@ class OrderPage extends ConsumerWidget {
               width: MediaQuery.of(context).size.width / 2,
               child: ref.watch(pickImageProvider) == null
                   ? const Text('')
-                  : Image.file(ref.watch(pickImageProvider)!, fit: BoxFit.fill),
+                  : Row(
+                      children: [
+                        for (var intem in ref.watch(pickImageProvider))
+                          Flexible(child: Image.file(intem!)),
+                      ],
+                    ),
             ),
             gapH12,
             Row(

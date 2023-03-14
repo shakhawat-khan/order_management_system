@@ -6,7 +6,11 @@ import 'package:image_picker/image_picker.dart';
 final ImagePicker picker = ImagePicker();
 
 Future<File> pickImageFromGallery() async {
-  final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+  final XFile? image = await picker.pickImage(
+    maxHeight: 700,
+    maxWidth: 700,
+    source: ImageSource.gallery,
+  );
 
   return File(image!.path);
 }
