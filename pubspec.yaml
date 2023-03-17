@@ -48,6 +48,8 @@ dependencies:
   riverpod_lint: ^1.1.5
   font_awesome_flutter: ^10.4.0
   image_picker: ^0.8.7
+  path_provider: ^2.0.13
+
 
 
 dev_dependencies:

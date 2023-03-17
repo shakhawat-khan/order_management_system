@@ -18,7 +18,13 @@ class CameraNotifier extends Notifier<List<File?>> {
   }
 
   void pickImageGallery() async {
+    // Directory tempDir = await getTemporaryDirectory();
+    // String tempPath = tempDir.path;
+    //  final file = File('${tempPath}/${image.path}');
+    // print(file);
+
     final image = await pickImageFromGallery();
+
     state = [...state, image];
   }
 }

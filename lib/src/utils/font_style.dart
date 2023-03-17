@@ -11,3 +11,29 @@ final spalshTextStyleleLato = GoogleFonts.lato(
 
 final kTextStyleLatoBold =
     GoogleFonts.lato(fontSize: 24, fontWeight: FontWeight.bold);
+
+// final kTextStyleButtonText = TextStyle(
+//   fontSize: 20,
+//   fontWeight: FontWeight.w600,
+// );
+
+TextStyle kTextStyleButtonText(Color color) {
+  return TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: color);
+}
+
+final kTextStylePoppinsTitel =
+    GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500);
+
+final kTextColorOrange = TextStyle(color: Color.fromRGBO(255, 109, 0, 1));
+
+final kGradientColorBlue = LinearGradient(
+  begin: Alignment(0, -1),
+  end: Alignment(0, 1),
+  colors: [Color.fromRGBO(8, 194, 240, .95), Color.fromRGBO(53, 76, 216, 1)],
+);
+
+final kGradientColorOrange = LinearGradient(
+  begin: Alignment(0, -1),
+  end: Alignment(0, 1),
+  colors: [Color.fromRGBO(255, 108, 8, 1), Color.fromRGBO(250, 182, 8, 1)],
+);

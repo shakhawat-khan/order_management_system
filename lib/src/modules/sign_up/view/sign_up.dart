@@ -33,15 +33,18 @@ class SignUp extends ConsumerWidget {
             shrinkWrap: true,
             physics: BouncingScrollPhysics(),
             children: [
-              const LogoEkopII(
-                height: 200,
-              ),
+              // const LogoEkopII(
+              //   height: 200,
+              // ),
+              // Text(
+              //   'Welcome !!',
+              //   style: kTextStyleLatoBold,
+              // ),
+              // gapH8,
               Text(
-                'Welcome !!',
-                style: kTextStyleLatoBold,
+                'Full Name',
+                style: kTextStylePoppinsTitel,
               ),
-              gapH8,
-              const Text('Please Provide Following Details For Your account'),
               gapH16,
               TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -54,10 +57,18 @@ class SignUp extends ConsumerWidget {
                 controller: ref.watch(textControllerProvider('signup_name')),
                 decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.abc),
-                    hintText: 'Name',
+                    hintText: 'Enter your full Name',
                     labelText: 'Name'),
               ),
-              gapH8,
+              gapH20,
+
+              Text(
+                'Email',
+                style: kTextStylePoppinsTitel,
+              ),
+
+              gapH16,
+
               TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
@@ -75,7 +86,12 @@ class SignUp extends ConsumerWidget {
                   textControllerProvider('signup_email'),
                 ),
               ),
-              gapH8,
+              gapH20,
+              Text(
+                'Password',
+                style: kTextStylePoppinsTitel,
+              ),
+              gapH16,
               TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
@@ -106,6 +122,13 @@ class SignUp extends ConsumerWidget {
                   textControllerProvider('signup_password'),
                 ),
               ),
+
+              gapH20,
+              Text(
+                'Mobile Number',
+                style: kTextStylePoppinsTitel,
+              ),
+
               gapH16,
               TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -119,14 +142,16 @@ class SignUp extends ConsumerWidget {
                 controller: ref.watch(textControllerProvider('signup_mobile')),
                 decoration: const InputDecoration(
                   prefixIcon: Icon(FontAwesomeIcons.mobile),
-                  hintText: 'Mobile Number',
+                  hintText: 'Enter your Mobile Number',
                   labelText: 'Mobile Number',
                 ),
               ),
               gapH16,
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Checkbox(
+                    activeColor: Colors.orange,
                     value: ref.watch(checkboxProvider),
                     onChanged: (value) {
                       ref.read(checkboxProvider.notifier).changeValue(value!);
@@ -136,72 +161,109 @@ class SignUp extends ConsumerWidget {
                 ],
               ),
               gapH8,
+
               Visibility(
                 visible: ref.watch(checkboxProvider),
-                child: TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value!.isEmpty == true) {
-                      return 'please enter Owner name';
-                    }
-                    return null;
-                  },
-                  keyboardType: TextInputType.name,
-                  controller:
-                      ref.watch(textControllerProvider('signup_ownerName')),
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.abc),
-                    hintText: 'Owner Name',
-                    labelText: 'Owner Name',
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Company Name',
+                          style: kTextStylePoppinsTitel,
+                        ),
+                      ],
+                    ),
+                    gapH16,
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value!.isEmpty == true) {
+                          return 'please enter Owner name';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.name,
+                      controller:
+                          ref.watch(textControllerProvider('signup_ownerName')),
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.abc),
+                        hintText: 'Owner Name',
+                        labelText: 'Owner Name',
+                      ),
+                    ),
+                    gapH20,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Designation',
+                          style: kTextStylePoppinsTitel,
+                        ),
+                      ],
+                    ),
+                    gapH16,
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value!.isEmpty == true) {
+                          return 'please enter Designation';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.name,
+                      controller: ref
+                          .watch(textControllerProvider('signup_designation')),
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.abc),
+                        hintText: 'Designation',
+                        labelText: 'Designation',
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              gapH8,
-              Visibility(
-                visible: ref.watch(checkboxProvider),
-                child: TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value!.isEmpty == true) {
-                      return 'please enter Designation';
-                    }
-                    return null;
-                  },
-                  keyboardType: TextInputType.name,
-                  controller:
-                      ref.watch(textControllerProvider('signup_designation')),
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.abc),
-                    hintText: 'Designation',
-                    labelText: 'Designation',
-                  ),
-                ),
-              ),
-              gapH20,
+
+              gapH48,
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (formKeySignup.currentState!.validate()) {
-                          signUptoFirebase(
-                              ref.watch(textControllerProvider('signup_email')),
-                              ref.watch(
-                                  textControllerProvider('signup_password')),
-                              context,
-                              ref);
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please Enter Valid Information'),
-                            ),
-                          );
-                        }
-                      },
-                      child: const Text('Create Account'),
+                  Flexible(
+                    child: SizedBox(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: DecoratedBox(
+                        decoration:
+                            BoxDecoration(gradient: kGradientColorOrange),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent),
+                          onPressed: () {
+                            if (formKeySignup.currentState!.validate()) {
+                              signUptoFirebase(
+                                  ref.watch(
+                                      textControllerProvider('signup_email')),
+                                  ref.watch(textControllerProvider(
+                                      'signup_password')),
+                                  context,
+                                  ref);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content:
+                                      Text('Please Enter Valid Information'),
+                                ),
+                              );
+                            }
+                          },
+                          child: Text(
+                            'Registered',
+                            style: kTextStyleButtonText(Colors.black),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
