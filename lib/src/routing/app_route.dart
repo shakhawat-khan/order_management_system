@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:order_management_system/src/modules/forget_password/view/forget_password.dart';
 import 'package:order_management_system/src/modules/home/view/home.dart';
 import 'package:order_management_system/src/modules/log_in/view/log_in.dart';
 import 'package:order_management_system/src/modules/order/view/order.dart';
@@ -7,7 +8,6 @@ import 'package:order_management_system/src/modules/sign_up_sccessful/signup_scc
 import 'package:order_management_system/src/modules/start_screen/view/start_screen.dart';
 
 import '../modules/all_order_list/order_list.dart';
-import '../modules/splash_screen/splash_screen.dart';
 
 enum AppRoute {
   splash,
@@ -17,7 +17,8 @@ enum AppRoute {
   home,
   signupSuccessful,
   order,
-  orderList
+  orderList,
+  forgetPassword
 }
 
 final GoRouter router = GoRouter(initialLocation: '/', routes: [
@@ -34,6 +35,13 @@ final GoRouter router = GoRouter(initialLocation: '/', routes: [
 
         //   ]
         // ),
+
+        GoRoute(
+          path: 'forget_password',
+          name: AppRoute.forgetPassword.name,
+          builder: (context, state) => const ForgetPassword(),
+        ),
+
         GoRoute(
           path: 'sign_up',
           name: AppRoute.signUp.name,
