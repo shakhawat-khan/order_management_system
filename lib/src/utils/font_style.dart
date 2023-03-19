@@ -37,3 +37,11 @@ final kGradientColorOrange = LinearGradient(
   end: Alignment(0, 1),
   colors: [Color.fromRGBO(255, 108, 8, 1), Color.fromRGBO(250, 182, 8, 1)],
 );
+
+final kTextButtonColorBlue = TextStyle(color: Color.fromRGBO(53, 76, 216, 1));
+
+final kPiChartBackground = LinearGradient(
+  begin: Alignment(0, -1),
+  end: Alignment(0, 1),
+  colors: [Color.fromRGBO(255, 255, 255, 1), Color.fromRGBO(8, 194, 240, .83)],
+);

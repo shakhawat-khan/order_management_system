@@ -49,6 +49,7 @@ dependencies:
   font_awesome_flutter: ^10.4.0
   image_picker: ^0.8.7
   path_provider: ^2.0.13
+  fl_chart: ^0.61.0
 
 
 

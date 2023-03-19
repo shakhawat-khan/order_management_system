@@ -102,9 +102,14 @@ class LogIn extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      'Forgot Password!',
-                      style: kTextColorOrange,
+                    TextButton(
+                      onPressed: () {
+                        context.goNamed(AppRoute.forgetPassword.name);
+                      },
+                      child: Text(
+                        'Forgot Password!',
+                        style: kTextColorOrange,
+                      ),
                     )
                   ],
                 ),
