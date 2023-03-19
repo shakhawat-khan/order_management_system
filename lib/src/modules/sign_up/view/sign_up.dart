@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:order_management_system/src/extensions/extensions.dart';
 import 'package:order_management_system/src/modules/sign_up/provider/fucntions.dart';
 import 'package:order_management_system/src/modules/sign_up/provider/providers.dart';
 import 'package:order_management_system/src/routing/app_route.dart';
+import 'package:order_management_system/src/utils/app_colors.dart';
 
 import '../../../components/logo_ekopii.dart';
 import '../../../constants/app_sizes.dart';
@@ -20,13 +22,18 @@ class SignUp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final passwordVisible = ref.watch(passwordProvider);
     return Scaffold(
+      backgroundColor:AppColors.primaryColor,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        backgroundColor: AppColors.primaryColor,
         centerTitle: true,
-        title: const Text('Sign Up'),
+        leading: Image.asset("assets/back.png"),
+        title: Text(
+          'Registered',
+          style:  GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.w500),
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
+      body: Container(
+        margin: EdgeInsets.only(left: 20,right: 20),
         child: Form(
           key: formKeySignup,
           child: ListView(
@@ -56,6 +63,8 @@ class SignUp extends ConsumerWidget {
                 },
                 controller: ref.watch(textControllerProvider('signup_name')),
                 decoration: const InputDecoration(
+                  filled: true,
+                    fillColor: Colors.white,
                     prefixIcon: Icon(Icons.abc),
                     hintText: 'Enter your full Name',
                     labelText: 'Name'),
@@ -79,6 +88,8 @@ class SignUp extends ConsumerWidget {
                 },
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
                     hintText: 'Enter your Email',
                     prefixIcon: Icon(Icons.abc),
                     labelText: 'Email'),
@@ -103,6 +114,8 @@ class SignUp extends ConsumerWidget {
                 },
                 obscureText: passwordVisible,
                 decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
                   suffixIcon: IconButton(
                     icon: Icon(
                       passwordVisible ? Icons.visibility_off : Icons.visibility,
@@ -141,7 +154,8 @@ class SignUp extends ConsumerWidget {
                 keyboardType: TextInputType.number,
                 controller: ref.watch(textControllerProvider('signup_mobile')),
                 decoration: const InputDecoration(
-                  prefixIcon: Icon(FontAwesomeIcons.mobile),
+                  filled: true,
+                  fillColor: Colors.white,
                   hintText: 'Enter your Mobile Number',
                   labelText: 'Mobile Number',
                 ),
@@ -189,6 +203,8 @@ class SignUp extends ConsumerWidget {
                       controller:
                           ref.watch(textControllerProvider('signup_ownerName')),
                       decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
                         prefixIcon: Icon(Icons.abc),
                         hintText: 'Owner Name',
                         labelText: 'Owner Name',
@@ -217,6 +233,8 @@ class SignUp extends ConsumerWidget {
                       controller: ref
                           .watch(textControllerProvider('signup_designation')),
                       decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
                         prefixIcon: Icon(Icons.abc),
                         hintText: 'Designation',
                         labelText: 'Designation',
@@ -227,47 +245,19 @@ class SignUp extends ConsumerWidget {
               ),
 
               gapH48,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: SizedBox(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      child: DecoratedBox(
-                        decoration:
-                            BoxDecoration(gradient: kGradientColorOrange),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.transparent),
-                          onPressed: () {
-                            if (formKeySignup.currentState!.validate()) {
-                              signUptoFirebase(
-                                  ref.watch(
-                                      textControllerProvider('signup_email')),
-                                  ref.watch(textControllerProvider(
-                                      'signup_password')),
-                                  context,
-                                  ref);
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content:
-                                      Text('Please Enter Valid Information'),
-                                ),
-                              );
-                            }
-                          },
-                          child: Text(
-                            'Registered',
-                            style: kTextStyleButtonText(Colors.black),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+              Container(
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.only(left: 20,right: 20),
+                height: 50,
+                decoration: BoxDecoration(
+                  gradient: kGradientColorOrange,
+
+                ),
+
+                child: Center(child: Text("Registred",style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w600),)),
               ),
+
+              gapH48,
             ],
           ),
         ),
