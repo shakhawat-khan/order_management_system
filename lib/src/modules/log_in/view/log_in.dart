@@ -20,13 +20,13 @@ import '../../sign_up/view/sign_up.dart';
 class LogIn extends ConsumerWidget {
   const LogIn({super.key});
 
+
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final passwordVisible = ref.watch(passwordProvider);
-
     return Scaffold(
       backgroundColor:Colors.transparent,
-
       appBar: AppBar(
         backgroundColor:Colors.transparent,
         title: Text(
@@ -140,8 +140,30 @@ class LogIn extends ConsumerWidget {
                   gapH20,
 
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+
+                      Theme(
+                        data: ThemeData(
+                          primarySwatch: Colors.blue,
+                          unselectedWidgetColor: AppColors.defaultColor,
+                        ),
+                        child: Checkbox(
+
+                          activeColor: Colors.orange,
+                          onChanged: (value) {
+                          },
+                          value: false,
+
+                        ),
+                      ),
+                      Text(
+                        'Stay with us',
+                        style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w300,color: Colors.black.withOpacity(0.4)),
+                      ),
+
+                      Spacer(),
+
                       TextButton(
                         onPressed: () {
                           context.goNamed(AppRoute.forgetPassword.name);

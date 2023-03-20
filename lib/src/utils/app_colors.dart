@@ -14,5 +14,7 @@ class AppColors {
   static var bottomNavigationBackgrundEnd = Color(0xff354CD8);
   static var listItemContainerColor = Color(0xffFDF5F0);
   static var listItemfontsmalColor = Color(0xff354CD8);
+  static var redButtonBackColor = Color(0xffFF0000);
+  static var defaultColor = Color(0xff6F6E6E);
 
 }
