@@ -46,3 +46,16 @@ final kPiChartBackground = LinearGradient(
   end: Alignment(0, 1),
   colors: [Color.fromRGBO(255, 255, 255, 1), Color.fromRGBO(8, 194, 240, .83)],
 );
+
+
+final appbackGroundgradent = LinearGradient(
+  begin: Alignment(0, -1),
+  end: Alignment(0, 1),
+  colors: [AppColors.buttonGradientColor3, AppColors.buttonGradientColor4],
+);
+
+final bottomNavigationBackgroundGradient = LinearGradient(
+  begin: Alignment(0, -1),
+  end: Alignment(0, 1),
+  colors: [AppColors.bottomNavigationBackgrundStart, AppColors.bottomNavigationBackgrundEnd],
+);

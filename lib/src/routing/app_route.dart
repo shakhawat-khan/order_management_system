@@ -2,18 +2,20 @@ import 'package:go_router/go_router.dart';
 import 'package:order_management_system/src/modules/forget_password/view/forget_password.dart';
 import 'package:order_management_system/src/modules/home/view/home.dart';
 import 'package:order_management_system/src/modules/log_in/view/log_in.dart';
-import 'package:order_management_system/src/modules/order/view/order.dart';
+import 'package:order_management_system/src/modules/order/view/add_order.dart';
 import 'package:order_management_system/src/modules/sign_up/view/sign_up.dart';
 import 'package:order_management_system/src/modules/sign_up_sccessful/signup_sccessful.dart';
 import 'package:order_management_system/src/modules/start_screen/view/start_screen.dart';
 
 import '../modules/all_order_list/order_list.dart';
+import '../modules/home/view/root-navigation.dart';
 
 enum AppRoute {
   splash,
   startScreen,
   signUp,
   logIn,
+  navroot,
   home,
   signupSuccessful,
   order,
@@ -24,8 +26,8 @@ enum AppRoute {
 final GoRouter router = GoRouter(initialLocation: '/', routes: [
   GoRoute(
       path: '/',
-      name: AppRoute.splash.name,
-      builder: (context, state) => const StartScreen(),
+      name: AppRoute.logIn.name,
+      builder: (context, state) => const LogIn(),
       routes: [
         // GoRoute(
         //   path: 'start',
@@ -47,17 +49,13 @@ final GoRouter router = GoRouter(initialLocation: '/', routes: [
           name: AppRoute.signUp.name,
           builder: (context, state) => const SignUp(),
         ),
+
         GoRoute(
-          path: 'log_in',
-          name: AppRoute.logIn.name,
-          builder: (context, state) => const LogIn(),
-        ),
-        GoRoute(
-          path: 'home/:email',
+          path: 'navroot/:email',
           name: AppRoute.home.name,
           builder: (context, state) {
             final email = state.params['email']!;
-            return HomePage(email: email);
+            return RootNavigation(email: email);
           },
         ),
         GoRoute(
