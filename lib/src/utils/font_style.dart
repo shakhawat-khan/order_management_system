@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:order_management_system/src/utils/app_colors.dart';
 
 final kTextStyleLato = GoogleFonts.lato(
   fontSize: 24,
@@ -35,7 +36,7 @@ final kGradientColorBlue = LinearGradient(
 final kGradientColorOrange = LinearGradient(
   begin: Alignment(0, -1),
   end: Alignment(0, 1),
-  colors: [Color.fromRGBO(255, 108, 8, 1), Color.fromRGBO(250, 182, 8, 1)],
+  colors: [AppColors.buttonGradientColor1, AppColors.buttonGradientColor2],
 );
 
 final kTextButtonColorBlue = TextStyle(color: Color.fromRGBO(53, 76, 216, 1));
@@ -44,4 +45,17 @@ final kPiChartBackground = LinearGradient(
   begin: Alignment(0, -1),
   end: Alignment(0, 1),
   colors: [Color.fromRGBO(255, 255, 255, 1), Color.fromRGBO(8, 194, 240, .83)],
+);
+
+
+final appbackGroundgradent = LinearGradient(
+  begin: Alignment(0, -1),
+  end: Alignment(0, 1),
+  colors: [AppColors.buttonGradientColor3, AppColors.buttonGradientColor4],
+);
+
+final bottomNavigationBackgroundGradient = LinearGradient(
+  begin: Alignment(0, -1),
+  end: Alignment(0, 1),
+  colors: [AppColors.bottomNavigationBackgrundStart, AppColors.bottomNavigationBackgrundEnd],
 );
