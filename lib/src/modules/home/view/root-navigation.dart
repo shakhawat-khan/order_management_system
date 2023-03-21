@@ -12,14 +12,14 @@ class RootNavigation extends StatefulWidget {
   _RootNavigationState createState() => _RootNavigationState(email);
 }
 
-int currentIndexwidget =0;
-class _RootNavigationState extends State<RootNavigation> {
+int currentIndexwidget = 0;
 
+class _RootNavigationState extends State<RootNavigation> {
   final String email;
   _RootNavigationState(this.email);
 
   final tabs = [
-    HomePage( email: '',),
+    //HomePage( email: '',),
     Center(child: Text("comming soon")),
     OrderList(),
   ];
@@ -30,23 +30,25 @@ class _RootNavigationState extends State<RootNavigation> {
       bottomNavigationBar: getBottomNav(),
     );
   }
+
   Widget getBottomNav() {
     return Container(
       decoration: BoxDecoration(
-          gradient:LinearGradient(
-            colors: [AppColors.bottomNavigationBackgrundStart, AppColors.bottomNavigationBackgrundEnd],
-            begin: Alignment.topLeft,
-            end: Alignment.topRight,
-            stops: [0.0, 0.8],
-            tileMode: TileMode.clamp,
-          )
-      ),
+          gradient: LinearGradient(
+        colors: [
+          AppColors.bottomNavigationBackgrundStart,
+          AppColors.bottomNavigationBackgrundEnd
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.topRight,
+        stops: [0.0, 0.8],
+        tileMode: TileMode.clamp,
+      )),
       child: BottomNavigationBar(
         currentIndex: currentIndexwidget,
-
         onTap: (index) {
           setState(() {
-            currentIndexwidget=index;
+            currentIndexwidget = index;
           });
         },
         showUnselectedLabels: false,
@@ -61,12 +63,9 @@ class _RootNavigationState extends State<RootNavigation> {
           BottomNavigationBarItem(
             icon: Image.asset("assets/ic-nav-market.png"),
             label: "Market",
-
           ),
           BottomNavigationBarItem(
-              icon: Image.asset("assets/ic-nav-trade.png"),
-              label: "Trade"
-          ),
+              icon: Image.asset("assets/ic-nav-trade.png"), label: "Trade"),
           BottomNavigationBarItem(
             icon: Image.asset("assets/ic-nav-wallet.png"),
             label: "Wallet",
@@ -74,6 +73,5 @@ class _RootNavigationState extends State<RootNavigation> {
         ],
       ),
     );
-
   }
 }

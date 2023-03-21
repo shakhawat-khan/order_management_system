@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../routing/app_route.dart';
+import '../../../services/share_pref.dart';
 
 void signIntoFirebase(TextEditingController emailController,
     TextEditingController passwordController, BuildContext context) async {
@@ -17,10 +18,19 @@ void signIntoFirebase(TextEditingController emailController,
     if (context.mounted) {
       if (user != null) {
         final test = user.email.toString();
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setString("f_credential", "${credential.user?.uid}");
+        //final prefs = await SharedPreferences.getInstance();
+        //prefs.setString("f_credential", "${credential.user?.uid}");
 
-        context.goNamed(AppRoute.home.name, params: {'email': test});
+        PrefService _perfService = PrefService();
+
+        _perfService.createCache('password').whenComplete(
+          () {
+            context.goNamed(
+              AppRoute.home.name,
+            );
+          },
+        );
+
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             backgroundColor: Colors.green, content: Text("sign up success")));
       }

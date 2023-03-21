@@ -10,53 +10,57 @@ import 'package:order_management_system/src/utils/font_style.dart';
 
 import '../../../components/pie_chart.dart';
 import '../../../components/title_circle.dart';
+import '../../../services/share_pref.dart';
 
 class HomePage extends StatefulWidget {
-  final String email;
-  const HomePage({super.key, required this.email});
+  const HomePage({
+    super.key,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-int currentIndexwidget =0;
+int currentIndexwidget = 0;
 
 class _HomePageState extends State<HomePage> {
+  PrefService _perfService = PrefService();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       key: scaffoldKey,
-      drawer: CustomDrawer(email: widget.email),
+      drawer: CustomDrawer(email: 'email'),
       appBar: AppBar(
         leading: IconButton(
-          onPressed: (){
-            if(scaffoldKey.currentState!.isDrawerOpen){
+          onPressed: () {
+            if (scaffoldKey.currentState!.isDrawerOpen) {
               scaffoldKey.currentState!.closeDrawer();
               //close drawer, if drawer is open
-            }else{
+            } else {
               scaffoldKey.currentState!.openDrawer();
               //open drawer, if drawer is closed
             }
           },
           icon: Image.asset("assets/ic-drawer.png"),
-
         ),
-        title:  Image.asset("assets/ic-logo.png"),
+        title: Image.asset("assets/ic-logo.png"),
         centerTitle: true,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
-              gradient: appbackGroundgradent
-          ),
+          decoration: BoxDecoration(gradient: appbackGroundgradent),
         ),
         actions: [
           IconButton(
             onPressed: () {},
             icon: CircleAvatar(
-              backgroundColor: Color(0xff354CD8),//Colors.cyan,
+              backgroundColor: Color(0xff354CD8), //Colors.cyan,
               child: ClipOval(
-                  child: Image.asset("assets/image-person.png",fit: BoxFit.cover,height: 35,width: 35,)),
+                  child: Image.asset(
+                "assets/image-person.png",
+                fit: BoxFit.cover,
+                height: 35,
+                width: 35,
+              )),
             ),
           )
         ],
@@ -64,11 +68,9 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-            gradient: appbackGroundgradent
-        ),
+        decoration: BoxDecoration(gradient: appbackGroundgradent),
         child: Container(
-          margin: EdgeInsets.only(left: 10,right: 10,top: 30),
+          margin: EdgeInsets.only(left: 10, right: 10, top: 30),
           child: Column(
             children: [
               Container(
@@ -117,34 +119,39 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
+              ElevatedButton(
+                onPressed: () {
+                  _perfService.removeCache('password').whenComplete(
+                      () => context.goNamed(AppRoute.startScreen.name));
+                },
+                child: Text('log out'),
+              )
             ],
           ),
         ),
       ),
-     // bottomNavigationBar: getBottomNav(),
+      // bottomNavigationBar: getBottomNav(),
     );
   }
 
   Widget getBottomNav() {
-
-
     return Container(
-
       decoration: BoxDecoration(
-          gradient:LinearGradient(
-            colors: [AppColors.bottomNavigationBackgrundStart, AppColors.bottomNavigationBackgrundEnd],
-            begin: Alignment.topLeft,
-            end: Alignment.topRight,
-            stops: [0.0, 0.8],
-            tileMode: TileMode.clamp,
-          )
-      ),
+          gradient: LinearGradient(
+        colors: [
+          AppColors.bottomNavigationBackgrundStart,
+          AppColors.bottomNavigationBackgrundEnd
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.topRight,
+        stops: [0.0, 0.8],
+        tileMode: TileMode.clamp,
+      )),
       child: BottomNavigationBar(
         currentIndex: currentIndexwidget,
-
         onTap: (index) {
           setState(() {
-            currentIndexwidget=index;
+            currentIndexwidget = index;
           });
         },
         showUnselectedLabels: false,
@@ -159,19 +166,15 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Image.asset("assets/ic-nav-market.png"),
             label: "Market",
-
           ),
           BottomNavigationBarItem(
-              icon: Image.asset("assets/ic-nav-trade.png"),
-              label: "Trade"
-          ),
+              icon: Image.asset("assets/ic-nav-trade.png"), label: "Trade"),
           BottomNavigationBarItem(
-              icon: Image.asset("assets/ic-nav-wallet.png"),
-              label: "Wallet",
+            icon: Image.asset("assets/ic-nav-wallet.png"),
+            label: "Wallet",
           ),
         ],
       ),
     );
-
   }
 }
