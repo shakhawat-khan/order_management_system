@@ -19,7 +19,7 @@ class _RootNavigationState extends State<RootNavigation> {
   _RootNavigationState(this.email);
 
   final tabs = [
-    //HomePage( email: '',),
+    HomePage(),
     Center(child: Text("comming soon")),
     OrderList(),
   ];

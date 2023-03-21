@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:order_management_system/src/models/orders_models.dart';
+import 'package:order_management_system/src/modules/order/provider/providers.dart';
 import 'package:order_management_system/src/utils/app_colors.dart';
 import 'package:order_management_system/src/utils/nav_utils.dart';
 
@@ -7,14 +11,50 @@ import '../../utils/font_style.dart';
 import '../order/view/add_order.dart';
 import 'order_details.dart';
 
-class OrderList extends StatefulWidget {
+class OrderList extends ConsumerStatefulWidget {
   const OrderList({Key? key}) : super(key: key);
 
   @override
-  _OrderListState createState() => _OrderListState();
+  ConsumerState<OrderList> createState() => _OrderListState();
 }
 
-class _OrderListState extends State<OrderList> {
+class _OrderListState extends ConsumerState<OrderList> {
+  List<Orders> totalOrders = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    FirebaseFirestore.instance.collection('orders').snapshots().listen((event) {
+      mapRecords(event);
+    });
+    fetchData();
+    super.initState();
+  }
+
+  fetchData() async {
+    var records = await FirebaseFirestore.instance.collection('orders').get();
+    mapRecords(records);
+  }
+
+  void mapRecords(QuerySnapshot<Map<String, dynamic>> records) {
+    var list = records.docs
+        .map((order) => Orders(
+            id: order.id,
+            allocatedJob: order['allocated_job'],
+            categoryName: order['category_name'],
+            contactPersonName: order['contact_person_name'],
+            contactPersonNumber: order['contact_person_number'],
+            details: order['details'],
+            startDate: order['start_date'],
+            endDate: order['end_date'],
+            imagePath: order['image_path'],
+            rawMaterial: order['raw_material']))
+        .toList();
+
+    setState(() {
+      totalOrders = list;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,99 +62,124 @@ class _OrderListState extends State<OrderList> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: Text('Order List',style: GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.w500)),
+        title: Text('Order List',
+            style:
+                GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.w500)),
         leading: GestureDetector(
-            onTap: (){
+            onTap: () {
               Navigator.pop(context);
             },
             child: Image.asset("assets/back.png")),
         flexibleSpace: Container(
-          decoration: BoxDecoration(
-              gradient: appbackGroundgradent
-          ),
+          decoration: BoxDecoration(gradient: appbackGroundgradent),
         ),
       ),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.only(bottom: 40),
-
-          decoration: BoxDecoration(
-              gradient: appbackGroundgradent
-          ),
+          decoration: BoxDecoration(gradient: appbackGroundgradent),
           child: Column(
             children: [
               ListView.builder(
-                itemCount: 10,
+                  itemCount: totalOrders.length,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context,index){
-                  return Column(
-                    children: [
-                      GestureDetector(
-                        onTap:(){
-                          NavUtils.push(context, OrderDetails());
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 112,
-                          margin: EdgeInsets.only(left: 20,right: 20),
-
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                blurRadius:2,
-                                offset: Offset(1,3), // Shadow position
-                              ),
-
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 105,
-                                height: 112,
-                                decoration: BoxDecoration(
-                                  color:AppColors.listItemContainerColor
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            NavUtils.push(context, OrderDetails());
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 112,
+                            margin: EdgeInsets.only(left: 20, right: 20),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  blurRadius: 2,
+                                  offset: Offset(1, 3), // Shadow position
                                 ),
-                                child: Center(child: Image.asset("assets/image-cocki.png")),
-                              ),
-                              SizedBox(width: 15,),
-                              Expanded(
-                                child: Container(
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 105,
+                                  height: 112,
                                   decoration: BoxDecoration(
-                                      color:Colors.white
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text("John Smith",style: GoogleFonts.poppins(color:Colors.black,fontSize: 18, fontWeight: FontWeight.w400) ,),
-                                      SizedBox(height: 5,),
-                                      Container(
-                                        width: 157,
-                                          child: Text("Remains of ancient build",style: GoogleFonts.poppins(color:AppColors.listItemfontsmalColor,fontSize: 12, fontWeight: FontWeight.w300) ,)),
-                                      SizedBox(height: 10,),
-                                      Container(
-                                          child: Text("23 Feb 2023 - 28 Feb 2023",style: GoogleFonts.poppins(color:Colors.black,fontSize: 12, fontWeight: FontWeight.w300) ,)),
-                                    ],
-                                  )
+                                      color: AppColors.listItemContainerColor),
+                                  child: Center(
+                                      child: Image.asset(
+                                          "assets/image-cocki.png")),
                                 ),
-                              ),
-                              Container(
-                                child: Image.asset("assets/ic-delete.png"),
-                              ),
-                              SizedBox(width:30,)
-                            ],
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                      decoration:
+                                          BoxDecoration(color: Colors.white),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            totalOrders[index].categoryName,
+                                            style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Container(
+                                              width: 157,
+                                              child: Text(
+                                                "Remains of ancient build",
+                                                style: GoogleFonts.poppins(
+                                                    color: AppColors
+                                                        .listItemfontsmalColor,
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w300),
+                                              )),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Container(
+                                              child: Text(
+                                            "23 Feb 2023 - 28 Feb 2023",
+                                            style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w300),
+                                          )),
+                                        ],
+                                      )),
+                                ),
+                                Container(
+                                  child: Image.asset("assets/ic-delete.png"),
+                                ),
+                                SizedBox(
+                                  width: 30,
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 10,),
-                    ],
-                  );
-                  }
-              )
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    );
+                  })
             ],
           ),
         ),
@@ -122,8 +187,12 @@ class _OrderListState extends State<OrderList> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           NavUtils.push(context, OrderPage());
-      },
-      child: Icon(Icons.add,color: Colors.white,size: 22,),
+        },
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 22,
+        ),
       ),
     );
   }

@@ -8,6 +8,7 @@ import 'package:order_management_system/src/modules/splash_screen/splash_screen.
 import 'package:order_management_system/src/modules/start_screen/view/start_screen.dart';
 
 import '../modules/all_order_list/order_list.dart';
+import '../modules/home/view/root-navigation.dart';
 import '../modules/order/view/add_order.dart';
 
 enum AppRoute {
@@ -53,7 +54,9 @@ final GoRouter router = GoRouter(initialLocation: '/', routes: [
           name: AppRoute.home.name,
           builder: (context, state) {
             //final email = state.params['email']!;
-            return HomePage();
+            return RootNavigation(
+              email: '',
+            );
           },
         ),
         GoRoute(

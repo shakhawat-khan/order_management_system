@@ -11,7 +11,7 @@ void signIntoFirebase(TextEditingController emailController,
     TextEditingController passwordController, BuildContext context) async {
   try {
     final user = FirebaseAuth.instance.currentUser;
-    final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim());
 
@@ -42,9 +42,14 @@ void signIntoFirebase(TextEditingController emailController,
           content: Text('No user found for that email.')));
       // print('No user found for that email.');
     } else if (e.code == 'wrong-password') {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
           backgroundColor: Colors.red,
-          content: Text('Wrong password provided for that user.')));
+          content: Text(
+            'Wrong password provided for that user.',
+          ),
+        ),
+      );
     }
   }
 }
