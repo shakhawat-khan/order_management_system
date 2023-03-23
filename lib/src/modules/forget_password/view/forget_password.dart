@@ -4,6 +4,8 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:order_management_system/src/constants/app_sizes.dart';
 import 'package:order_management_system/src/utils/font_style.dart';
 
+import '../../../utils/app_colors.dart';
+
 class ForgetPassword extends StatelessWidget {
   const ForgetPassword({super.key});
 
@@ -40,7 +42,18 @@ class ForgetPassword extends StatelessWidget {
             gapH20,
             TextFormField(
               decoration: InputDecoration(
-                  hintText: 'Enter your email', labelText: 'Email'),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: AppColors.inputBorderColor,
+                    width: 0.5,
+                  ),
+                ),
+                fillColor: Colors.white,
+                filled: true,
+                hintText: 'Enter your Email',
+                prefixIcon: Icon(Icons.abc),
+                labelText: 'Email',
+              ),
             ),
             gapH32,
             DecoratedBox(
@@ -59,85 +72,95 @@ class ForgetPassword extends StatelessWidget {
                 ),
               ),
             ),
-            gapH48,
-            Text('Enter the 4 digit security code & your'),
-            Text('email account will be verified'),
-            gapH24,
-            Row(
-              children: [
-                Flexible(
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    autofocus: true,
-                    onChanged: (value) {
-                      if (value.length == 1) {
-                        FocusScope.of(context).nextFocus();
-                      }
-                    },
-                  ),
-                ),
-                gapW24,
-                Flexible(
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      if (value.length == 1) {
-                        FocusScope.of(context).nextFocus();
-                      }
-                    },
-                  ),
-                ),
-                gapW24,
-                Flexible(
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      if (value.length == 1) {
-                        FocusScope.of(context).nextFocus();
-                      }
-                    },
-                  ),
-                ),
-                gapW24,
-                Flexible(
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      if (value.length == 1) {}
-                    },
-                  ),
-                ),
-              ],
-            ),
-            gapH24,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Don\'t Receive your code! '),
-                TextButton(
-                  onPressed: () {},
-                  child: Text('Resend'),
-                )
-              ],
-            ),
-            gapH24,
-            SizedBox(
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              child: DecoratedBox(
-                decoration: BoxDecoration(gradient: kGradientColorBlue),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                  ),
-                  onPressed: () {},
-                  child: Text(
-                    'Verifiey',
-                    style: kTextStyleButtonText(Colors.white),
-                  ),
-                ),
-              ),
-            ),
+            // gapH48,
+            // Text('Enter the 4 digit security code & your'),
+            // Text('email account will be verified'),
+            // gapH24,
+            // Row(
+            //   children: [
+            //     Flexible(
+            //       child: TextFormField(
+            //         keyboardType: TextInputType.number,
+            //         autofocus: true,
+            //         onChanged: (value) {
+            //           if (value.length == 1) {
+            //             FocusScope.of(context).nextFocus();
+            //           }
+            //         },
+            //       ),
+            //     ),
+            //     gapW24,
+            //     Flexible(
+            //       child: TextFormField(
+            //         keyboardType: TextInputType.number,
+            //         onChanged: (value) {
+            //           if (value.length == 1) {
+            //             FocusScope.of(context).nextFocus();
+            //           }
+            //         },
+            //       ),
+            //     ),
+            //     gapW24,
+            //     Flexible(
+            //       child: TextFormField(
+            //         keyboardType: TextInputType.number,
+            //         onChanged: (value) {
+            //           if (value.length == 1) {
+            //             FocusScope.of(context).nextFocus();
+            //           }
+            //         },
+            //       ),
+            //     ),
+            //     gapW24,
+            //     Flexible(
+            //       child: TextFormField(
+            //         decoration: InputDecoration(
+            //           enabledBorder: OutlineInputBorder(
+            //             borderSide: BorderSide(
+            //               color: AppColors.inputBorderColor,
+            //               width: 0.5,
+            //             ),
+            //           ),
+            //           fillColor: Colors.white,
+            //           filled: true,
+            //         ),
+            //         keyboardType: TextInputType.number,
+            //         onChanged: (value) {
+            //           if (value.length == 1) {}
+            //         },
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // gapH24,
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Text('Don\'t Receive your code! '),
+            //     TextButton(
+            //       onPressed: () {},
+            //       child: Text('Resend'),
+            //     )
+            //   ],
+            // ),
+            // gapH24,
+            // SizedBox(
+            //   height: 50,
+            //   width: MediaQuery.of(context).size.width,
+            //   child: DecoratedBox(
+            //     decoration: BoxDecoration(gradient: kGradientColorBlue),
+            //     child: ElevatedButton(
+            //       style: ElevatedButton.styleFrom(
+            //         backgroundColor: Colors.transparent,
+            //       ),
+            //       onPressed: () {},
+            //       child: Text(
+            //         'Verifiey',
+            //         style: kTextStyleButtonText(Colors.white),
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

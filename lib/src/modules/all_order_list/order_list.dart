@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:order_management_system/src/models/orders_models.dart';
-import 'package:order_management_system/src/modules/order/provider/providers.dart';
 import 'package:order_management_system/src/utils/app_colors.dart';
 import 'package:order_management_system/src/utils/nav_utils.dart';
 
@@ -21,11 +20,15 @@ class OrderList extends ConsumerStatefulWidget {
 
 class _OrderListState extends ConsumerState<OrderList> {
   List<Orders> totalOrders = [];
-  List<Orders> tempOrder = [];
+  final user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     // TODO: implement initState
-    FirebaseFirestore.instance.collection('orders').snapshots().listen((event) {
+    FirebaseFirestore.instance
+        .collection('orders')
+        .where('user_id', isEqualTo: user!.uid)
+        .snapshots()
+        .listen((event) {
       mapRecords(event);
     });
     fetchData();
@@ -33,16 +36,18 @@ class _OrderListState extends ConsumerState<OrderList> {
   }
 
   fetchData() async {
-    var records = await FirebaseFirestore.instance.collection('orders').get();
+    var records = await FirebaseFirestore.instance
+        .collection('orders')
+        .where('user_id', isEqualTo: user!.uid)
+        .get();
     mapRecords(records);
   }
 
   void mapRecords(QuerySnapshot<Map<String, dynamic>> records) {
-    totalOrders.clear();
-    tempOrder.clear();
     var list = records.docs
-        .map((order) => Orders(
-            id: order['id'],
+        .map(
+          (order) => Orders(
+            orderId: order.id,
             allocatedJob: order['allocated_job'],
             categoryName: order['category_name'],
             contactPersonName: order['contact_person_name'],
@@ -51,24 +56,19 @@ class _OrderListState extends ConsumerState<OrderList> {
             startDate: order['start_date'],
             endDate: order['end_date'],
             imagePath: order['image_path'],
-            rawMaterial: order['raw_material']))
+            rawMaterial: order['raw_material'],
+            userId: order['user_id'],
+          ),
+        )
         .toList();
 
     setState(() {
       totalOrders = list;
-      totalOrders.forEach((element) {
-
-        print("the userId is ${element.categoryName}  and id is ${element.id}");
-
-        if(element.id =="${FirebaseAuth.instance.currentUser?.uid}"){
-          tempOrder.add(element);
-        }
-
-      });
-
-      totalOrders= tempOrder;
-
     });
+  }
+
+  deleteItem(String id) {
+    FirebaseFirestore.instance.collection('orders').doc(id).delete();
   }
 
   @override
@@ -82,119 +82,131 @@ class _OrderListState extends ConsumerState<OrderList> {
             style:
                 GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.w500)),
         leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Image.asset("assets/back.png")),
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Image.asset("assets/back.png"),
+        ),
         flexibleSpace: Container(
           decoration: BoxDecoration(gradient: appbackGroundgradent),
         ),
       ),
-      body: Container(
-
-        decoration: BoxDecoration(gradient: appbackGroundgradent),
-        child: Column(
-          children: [
-            ListView.builder(
-                itemCount: totalOrders.length,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          NavUtils.push(context, OrderDetails());
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 112,
-                          margin: EdgeInsets.only(left: 20, right: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                blurRadius: 2,
-                                offset: Offset(1, 3), // Shadow position
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 105,
-                                height: 112,
-                                decoration: BoxDecoration(
-                                    color: AppColors.listItemContainerColor),
-                                child: Center(
-                                    child: Image.asset(
-                                        "assets/image-cocki.png")),
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Container(
-                                  decoration:
-                                      BoxDecoration(color: Colors.white),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        totalOrders[index].categoryName,
-                                        style: GoogleFonts.poppins(
-                                            color: Colors.black,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Container(
-                                          width: 157,
-                                          child: Text(
-                                            "Remains of ancient build",
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(bottom: 40),
+          decoration: BoxDecoration(gradient: appbackGroundgradent),
+          child: Column(
+            children: [
+              ListView.builder(
+                  itemCount: totalOrders.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            NavUtils.push(context, OrderDetails());
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 112,
+                            margin: EdgeInsets.only(left: 20, right: 20),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  blurRadius: 2,
+                                  offset: Offset(1, 3), // Shadow position
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 105,
+                                  height: 112,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.listItemContainerColor),
+                                  child: Center(
+                                      child: Image.asset(
+                                          "assets/image-cocki.png")),
+                                ),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                      decoration:
+                                          BoxDecoration(color: Colors.white),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            totalOrders[index].categoryName,
                                             style: GoogleFonts.poppins(
-                                                color: AppColors
-                                                    .listItemfontsmalColor,
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Container(
+                                              width: 157,
+                                              child: Text(
+                                                "Remains of ancient build",
+                                                style: GoogleFonts.poppins(
+                                                    color: AppColors
+                                                        .listItemfontsmalColor,
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w300),
+                                              )),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Container(
+                                              child: Text(
+                                            "23 Feb 2023 - 28 Feb 2023",
+                                            style: GoogleFonts.poppins(
+                                                color: Colors.black,
                                                 fontSize: 12,
-                                                fontWeight:
-                                                    FontWeight.w300),
+                                                fontWeight: FontWeight.w300),
                                           )),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                          child: Text(
-                                        "23 Feb 2023 - 28 Feb 2023",
-                                        style: GoogleFonts.poppins(
-                                            color: Colors.black,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w300),
+                                        ],
                                       )),
-                                    ],
-                                  )),
-                              Container(
-                                child: Image.asset("assets/ic-delete.png"),
-                              ),
-                              SizedBox(
-                                width: 30,
-                              )
-                            ],
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    deleteItem(totalOrders[index].orderId);
+
+                                    print(totalOrders[index].orderId);
+                                    print('hello');
+                                  },
+                                  child: Container(
+                                    child: Image.asset("assets/ic-delete.png"),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 30,
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  );
-                }),
-
-          ],
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    );
+                  })
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

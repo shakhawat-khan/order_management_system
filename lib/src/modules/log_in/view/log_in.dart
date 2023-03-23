@@ -20,24 +20,19 @@ import '../../sign_up/view/sign_up.dart';
 class LogIn extends ConsumerWidget {
   const LogIn({super.key});
 
-
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final passwordVisible = ref.watch(passwordProvider);
     return Scaffold(
-      backgroundColor:Colors.transparent,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor:Colors.transparent,
+        backgroundColor: Colors.transparent,
         title: Text(
           'Login',
-          style:  GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.w500),
+          style: GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.w500),
         ),
-
         flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: appbackGroundgradent
-          ),
+          decoration: BoxDecoration(gradient: appbackGroundgradent),
         ),
         automaticallyImplyLeading: false,
         centerTitle: true,
@@ -45,12 +40,10 @@ class LogIn extends ConsumerWidget {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          gradient: appbackGroundgradent
-        ),
+        decoration: BoxDecoration(gradient: appbackGroundgradent),
         child: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.only(left: 20,right: 20),
+            margin: EdgeInsets.only(left: 20, right: 20),
             child: Form(
               key: formKeyLogin,
               child: Column(
@@ -59,7 +52,9 @@ class LogIn extends ConsumerWidget {
                   // const LogoEkopII(
                   //   height: 200,
                   // ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Text(
                     'Email Address',
                     style: kTextStylePoppinsTitel,
@@ -76,20 +71,21 @@ class LogIn extends ConsumerWidget {
                       return null;
                     },
                     keyboardType: TextInputType.emailAddress,
-
                     decoration: const InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColors.inputBorderColor,
-                            width: 0.5,
-                          ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColors.inputBorderColor,
+                          width: 0.5,
                         ),
+                      ),
                       fillColor: Colors.white,
-                        filled: true,
-                        hintText: 'Enter your Email',
-                        prefixIcon: Icon(Icons.abc),
-                        labelText: 'Email'),
-                    controller: ref.watch(textControllerProvider('login_email')),
+                      filled: true,
+                      hintText: 'Enter your Email',
+                      prefixIcon: Icon(Icons.abc),
+                      labelText: 'Email',
+                    ),
+                    controller:
+                        ref.watch(textControllerProvider('login_email')),
                   ),
                   gapH20,
                   Text(
@@ -142,28 +138,25 @@ class LogIn extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-
                       Theme(
                         data: ThemeData(
                           primarySwatch: Colors.blue,
                           unselectedWidgetColor: AppColors.defaultColor,
                         ),
                         child: Checkbox(
-
                           activeColor: Colors.orange,
-                          onChanged: (value) {
-                          },
+                          onChanged: (value) {},
                           value: false,
-
                         ),
                       ),
                       Text(
                         'Stay with us',
-                        style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w300,color: Colors.black.withOpacity(0.4)),
+                        style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black.withOpacity(0.4)),
                       ),
-
                       Spacer(),
-
                       TextButton(
                         onPressed: () {
                           context.goNamed(AppRoute.forgetPassword.name);
@@ -187,7 +180,7 @@ class LogIn extends ConsumerWidget {
                           width: MediaQuery.of(context).size.width,
                           child: DecoratedBox(
                             decoration:
-                            BoxDecoration(gradient: kGradientColorBlue),
+                                BoxDecoration(gradient: kGradientColorBlue),
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
@@ -195,8 +188,8 @@ class LogIn extends ConsumerWidget {
                               onPressed: () {
                                 if (formKeyLogin.currentState!.validate()) {
                                   signIntoFirebase(
-                                      ref.watch(
-                                          textControllerProvider('login_email')),
+                                      ref.watch(textControllerProvider(
+                                          'login_email')),
                                       ref.watch(textControllerProvider(
                                           'login_password')),
                                       context);
@@ -204,7 +197,8 @@ class LogIn extends ConsumerWidget {
                                   //print(user);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                        content: Text('Please Enter Valid Information')),
+                                        content: Text(
+                                            'Please Enter Valid Information')),
                                   );
                                 }
                               },
@@ -221,7 +215,6 @@ class LogIn extends ConsumerWidget {
                   SizedBox(
                     height: 100,
                   ),
-
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

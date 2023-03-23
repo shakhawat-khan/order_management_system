@@ -28,7 +28,7 @@ class OrderPage extends ConsumerStatefulWidget {
 }
 
 class _OrderPageState extends ConsumerState<OrderPage> {
-  var userId;
+  final user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     // TODO: implement initState
@@ -216,7 +216,7 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                       isExpanded: true,
                       icon: Image.asset("assets/ic-downarrow-dropdown.png"),
                       underline: SizedBox(),
-                      hint: Container(
+                      hint: Flexible(
                           child: Text(
                         'Category Name',
                         style: kTextStylePoppinsTitel,
@@ -462,34 +462,34 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                           ),
                           onPressed: () {
                             addItem(
-                                Orders(
-                                allocatedJob: ref.read(dropdown2Provider)!,
-                                categoryName: ref.read(dropdown1Provider)!,
-                                id:FirebaseAuth.instance.currentUser?.uid,
-                                contactPersonName: ref
-                                    .read(textControllerProvider(
-                                      'contact_person_name',
-                                    ))
-                                    .text,
-                                contactPersonNumber: ref
-                                    .read(textControllerProvider(
-                                      'contact_person_number',
-                                    ))
-                                    .text,
-                                details: ref
-                                    .read(textControllerProvider(
-                                      'order_description',
-                                    ))
-                                    .text,
-                                startDate: 0,
-                                endDate: 69,
-                                imagePath: 'test',
-                                rawMaterial: ref
-                                    .read(textControllerProvider(
-                                      'order_rawMaterial',
-                                    ))
-                                    .text,
-                                )
+                              Orders(
+                                  orderId: '',
+                                  allocatedJob: ref.read(dropdown2Provider)!,
+                                  categoryName: ref.read(dropdown1Provider)!,
+                                  contactPersonName: ref
+                                      .read(textControllerProvider(
+                                        'contact_person_name',
+                                      ))
+                                      .text,
+                                  contactPersonNumber: ref
+                                      .read(textControllerProvider(
+                                        'contact_person_number',
+                                      ))
+                                      .text,
+                                  details: ref
+                                      .read(textControllerProvider(
+                                        'order_description',
+                                      ))
+                                      .text,
+                                  startDate: 'df',
+                                  endDate: '420',
+                                  imagePath: 'test',
+                                  rawMaterial: ref
+                                      .read(textControllerProvider(
+                                        'order_rawMaterial',
+                                      ))
+                                      .text,
+                                  userId: user!.uid.toString()),
                             );
                           },
                           child: Text(
