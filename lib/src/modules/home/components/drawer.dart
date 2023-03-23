@@ -33,6 +33,8 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
+          SizedBox(height: 120,),
+
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:order_management_system/src/utils/nav_utils.dart';
 
 import '../../routing/app_route.dart';
 import '../../services/share_pref.dart';
@@ -31,10 +32,11 @@ class _SplashState extends State<Splash> {
       _prefService.readCache("password").then((value) {
         print(value);
         if (value != null) {
-          print('if');
+
           return context.goNamed(AppRoute.home.name);
+          //return NavUtils.pushReplacement(context, Home());
         } else {
-          return context.pushNamed(AppRoute.startScreen.name);
+          return context.goNamed(AppRoute.logIn.name);
         }
 
         //context.pushReplacementNamed(AppRoute.startScreen.name);

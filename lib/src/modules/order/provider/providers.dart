@@ -4,21 +4,35 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:order_management_system/src/models/orders_models.dart';
 import 'package:order_management_system/src/modules/order/provider/functions.dart';
 
-final fileListProvider = StateProvider<File?>((ref) {
-  return null;
-});
+// final fileListProvider = StateProvider<List<XFile?>>((ref) {
+//   return null;
+// });
 
-final pickImageProvider =
-    NotifierProvider<CameraNotifier, List<File?>>(CameraNotifier.new);
+final pickImageProvider = NotifierProvider<CameraNotifier, List<XFile?>>(CameraNotifier.new);
 
-class CameraNotifier extends Notifier<List<File?>> {
+class CameraNotifier extends Notifier<List<XFile?>> {
   @override
   build() {
     return [];
   }
+
+
+ /* final ImagePicker imagePicker = ImagePicker();
+  List<XFile>? imageFileList = [];
+
+  void selectImages() async {
+    final List<XFile>? selectedImages = await
+    imagePicker.pickMultiImage();
+    if (selectedImages!.isNotEmpty) {
+      imageFileList!.addAll(selectedImages);
+    }
+    print("Image List Length:" + imageFileList!.length.toString());
+
+  }*/
 
   void pickImageGallery() async {
     // Directory tempDir = await getTemporaryDirectory();
@@ -26,9 +40,20 @@ class CameraNotifier extends Notifier<List<File?>> {
     //  final file = File('${tempPath}/${image.path}');
     // print(file);
 
-    final image = await pickImageFromGallery();
+    var image = await pickImageFromGallery();
+     List<XFile>limage=[];
+    if(image.length>3){
 
-    state = [...state, image];
+      for(int i=0;i<=3;i++){
+        limage.add(image[i]!);
+      }
+      image = limage;
+    }
+
+
+
+   // state = [...state, image];
+    state = image;
   }
 }
 

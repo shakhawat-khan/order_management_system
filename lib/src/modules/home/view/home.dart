@@ -26,6 +26,7 @@ int currentIndexwidget = 0;
 class _HomePageState extends State<HomePage> {
   PrefService _perfService = PrefService();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,8 +51,10 @@ class _HomePageState extends State<HomePage> {
           decoration: BoxDecoration(gradient: appbackGroundgradent),
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
+          /*IconButton(
+            onPressed: () {
+
+            },
             icon: CircleAvatar(
               backgroundColor: Color(0xff354CD8), //Colors.cyan,
               child: ClipOval(
@@ -62,6 +65,40 @@ class _HomePageState extends State<HomePage> {
                 width: 35,
               )),
             ),
+          )*/
+
+          PopupMenuButton(
+            icon: CircleAvatar(
+              backgroundColor: Color(0xff354CD8), //Colors.cyan,
+              child: ClipOval(
+                  child: Image.asset(
+                    "assets/image-person.png",
+                    fit: BoxFit.cover,
+                    height: 35,
+                    width: 35,
+                  )),
+            ),
+            itemBuilder: (BuildContext context) {
+
+              return [
+                PopupMenuItem<int>(
+                  value: 0,
+                  onTap: () {
+                    _perfService.removeCache('password').whenComplete(
+                            () => context.goNamed(AppRoute.logIn.name));
+                  },
+                  child:  Row(
+                    children: [
+                      SizedBox(width: 15,),
+
+                      Icon(Icons.logout,size: 22,),
+                      SizedBox(width: 10,),
+                      Text("Log Out"),
+                    ],
+                  ),
+                ),
+              ];
+            },
           )
         ],
       ),
@@ -119,13 +156,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  _perfService.removeCache('password').whenComplete(
-                      () => context.goNamed(AppRoute.startScreen.name));
-                },
-                child: Text('log out'),
-              )
+
             ],
           ),
         ),

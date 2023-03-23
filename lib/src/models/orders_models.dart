@@ -31,7 +31,7 @@ class Orders {
   int endDate;
   String imagePath;
   String rawMaterial;
-  String id;
+  String? id;
 
   factory Orders.fromJson(Map<String, dynamic> json) => Orders(
         allocatedJob: json["allocated_job"],

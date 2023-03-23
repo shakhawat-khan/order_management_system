@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,6 +21,7 @@ class OrderList extends ConsumerStatefulWidget {
 
 class _OrderListState extends ConsumerState<OrderList> {
   List<Orders> totalOrders = [];
+  List<Orders> tempOrder = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -36,9 +38,11 @@ class _OrderListState extends ConsumerState<OrderList> {
   }
 
   void mapRecords(QuerySnapshot<Map<String, dynamic>> records) {
+    totalOrders.clear();
+    tempOrder.clear();
     var list = records.docs
         .map((order) => Orders(
-            id: order.id,
+            id: order['id'],
             allocatedJob: order['allocated_job'],
             categoryName: order['category_name'],
             contactPersonName: order['contact_person_name'],
@@ -52,6 +56,18 @@ class _OrderListState extends ConsumerState<OrderList> {
 
     setState(() {
       totalOrders = list;
+      totalOrders.forEach((element) {
+
+        print("the userId is ${element.categoryName}  and id is ${element.id}");
+
+        if(element.id =="${FirebaseAuth.instance.currentUser?.uid}"){
+          tempOrder.add(element);
+        }
+
+      });
+
+      totalOrders= tempOrder;
+
     });
   }
 
@@ -74,114 +90,111 @@ class _OrderListState extends ConsumerState<OrderList> {
           decoration: BoxDecoration(gradient: appbackGroundgradent),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.only(bottom: 40),
-          decoration: BoxDecoration(gradient: appbackGroundgradent),
-          child: Column(
-            children: [
-              ListView.builder(
-                  itemCount: totalOrders.length,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            NavUtils.push(context, OrderDetails());
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 112,
-                            margin: EdgeInsets.only(left: 20, right: 20),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  blurRadius: 2,
-                                  offset: Offset(1, 3), // Shadow position
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 105,
-                                  height: 112,
-                                  decoration: BoxDecoration(
-                                      color: AppColors.listItemContainerColor),
-                                  child: Center(
-                                      child: Image.asset(
-                                          "assets/image-cocki.png")),
-                                ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                Expanded(
-                                  child: Container(
-                                      decoration:
-                                          BoxDecoration(color: Colors.white),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            totalOrders[index].categoryName,
+      body: Container(
+
+        decoration: BoxDecoration(gradient: appbackGroundgradent),
+        child: Column(
+          children: [
+            ListView.builder(
+                itemCount: totalOrders.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          NavUtils.push(context, OrderDetails());
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 112,
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                blurRadius: 2,
+                                offset: Offset(1, 3), // Shadow position
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 105,
+                                height: 112,
+                                decoration: BoxDecoration(
+                                    color: AppColors.listItemContainerColor),
+                                child: Center(
+                                    child: Image.asset(
+                                        "assets/image-cocki.png")),
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Container(
+                                  decoration:
+                                      BoxDecoration(color: Colors.white),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        totalOrders[index].categoryName,
+                                        style: GoogleFonts.poppins(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Container(
+                                          width: 157,
+                                          child: Text(
+                                            "Remains of ancient build",
                                             style: GoogleFonts.poppins(
-                                                color: Colors.black,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Container(
-                                              width: 157,
-                                              child: Text(
-                                                "Remains of ancient build",
-                                                style: GoogleFonts.poppins(
-                                                    color: AppColors
-                                                        .listItemfontsmalColor,
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w300),
-                                              )),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Container(
-                                              child: Text(
-                                            "23 Feb 2023 - 28 Feb 2023",
-                                            style: GoogleFonts.poppins(
-                                                color: Colors.black,
+                                                color: AppColors
+                                                    .listItemfontsmalColor,
                                                 fontSize: 12,
-                                                fontWeight: FontWeight.w300),
+                                                fontWeight:
+                                                    FontWeight.w300),
                                           )),
-                                        ],
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                          child: Text(
+                                        "23 Feb 2023 - 28 Feb 2023",
+                                        style: GoogleFonts.poppins(
+                                            color: Colors.black,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w300),
                                       )),
-                                ),
-                                Container(
-                                  child: Image.asset("assets/ic-delete.png"),
-                                ),
-                                SizedBox(
-                                  width: 30,
-                                )
-                              ],
-                            ),
+                                    ],
+                                  )),
+                              Container(
+                                child: Image.asset("assets/ic-delete.png"),
+                              ),
+                              SizedBox(
+                                width: 30,
+                              )
+                            ],
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    );
-                  })
-            ],
-          ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  );
+                }),
+
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(

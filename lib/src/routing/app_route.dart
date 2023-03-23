@@ -13,7 +13,6 @@ import '../modules/order/view/add_order.dart';
 
 enum AppRoute {
   splash,
-  startScreen,
   signUp,
   logIn,
   home,
@@ -29,11 +28,11 @@ final GoRouter router = GoRouter(initialLocation: '/', routes: [
       name: AppRoute.splash.name,
       builder: (context, state) => const Splash(),
       routes: [
-        GoRoute(
-            path: 'start',
-            name: AppRoute.startScreen.name,
-            builder: (context, state) => StartScreen(),
-            routes: []),
+        // GoRoute(
+        //     path: 'start',
+        //     name: AppRoute.startScreen.name,
+        //     builder: (context, state) => StartScreen(),
+        //     routes: []),
         GoRoute(
           path: 'forget_password',
           name: AppRoute.forgetPassword.name,

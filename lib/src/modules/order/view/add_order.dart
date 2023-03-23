@@ -1,10 +1,13 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:order_management_system/src/constants/app_sizes.dart';
 import 'package:order_management_system/src/modules/order/provider/functions.dart';
 import 'package:order_management_system/src/modules/order/provider/providers.dart';
@@ -25,14 +28,23 @@ class OrderPage extends ConsumerStatefulWidget {
 }
 
 class _OrderPageState extends ConsumerState<OrderPage> {
+  var userId;
   @override
   void initState() {
     // TODO: implement initState
+
+    userId =FirebaseAuth.instance.currentUser?.uid!;
+    print("user id ......${FirebaseAuth.instance.currentUser?.uid}");
     super.initState();
   }
 
+  TextEditingController dateStart = TextEditingController();
+  TextEditingController dateEnd = TextEditingController();
+
   addItem(Orders orders) {
+
     FirebaseFirestore.instance.collection('orders').add(orders.toJson());
+    //FirebaseFirestore.instance.collection("${userId}").add(orders.toJson());
   }
 
   @override
@@ -95,16 +107,53 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                       SizedBox(
                         width: 10,
                       ),
+
+                      ref.watch(pickImageProvider).length>0? Expanded(
+                        child: Container(
+                          child: Wrap(
+                            runSpacing: 2,
+                            spacing: 2,
+                            children: ref.watch(pickImageProvider).map((e) =>   GestureDetector(
+                              onTap: ()async{
+                                await showDialog(
+                                    context: context,
+                                    builder: (_) => ImageDialog(e!.path)
+                                );
+                              },
+                              child: Container(
+                                width: 82,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        color: AppColors.inputBorderColor,
+                                        width: 0.5)),
+                                child: Image.file(File(e!.path),fit: BoxFit.cover,),
+                              ),
+                            )
+                            ).toList(),
+                          ),
+                        ),
+                      ):
                       Column(
                         children: [
-                          Container(
-                            width: 82,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                    color: AppColors.inputBorderColor,
-                                    width: 0.5)),
+                          GestureDetector(
+                            onTap: (){
+                              ref.read(pickImageProvider).forEach((element) {
+                                print("Image path.......${element?.path}");
+                              });
+                            },
+                            child: Container(
+                              width: 82,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      color: AppColors.inputBorderColor,
+                                      width: 0.5)),
+
+
+                            ),
                           ),
                           SizedBox(
                             height: 5,
@@ -123,7 +172,7 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                       SizedBox(
                         width: 10,
                       ),
-                      Column(
+                      ref.watch(pickImageProvider).length>0?SizedBox(): Column(
                         children: [
                           Container(
                             width: 82,
@@ -167,7 +216,7 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                       isExpanded: true,
                       icon: Image.asset("assets/ic-downarrow-dropdown.png"),
                       underline: SizedBox(),
-                      hint: Flexible(
+                      hint: Container(
                           child: Text(
                         'Category Name',
                         style: kTextStylePoppinsTitel,
@@ -329,7 +378,14 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                           height: 10,
                         ),
                         TextField(
+                          style: GoogleFonts.poppins(
+                              color: Colors.black,
+                              fontSize: 13,
+                              fontWeight:
+                              FontWeight.w300),
+                          controller: ref.watch(textControllerProvider('start_date')),
                           decoration: InputDecoration(
+                              contentPadding: EdgeInsets.only(left: 5),
                               enabledBorder: const OutlineInputBorder(
                                 borderSide: const BorderSide(
                                     color: AppColors.inputBorderColor,
@@ -339,7 +395,9 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                               filled: true,
                               suffixIcon: InkWell(
                                   onTap: () async {
-                                    await selectDate(context);
+                                    //dateStart.text = DateFormat('yyyy-MM-dd – kk:mm').format(await selectDate(context));
+                                    ref.read(textControllerProvider('start_date')).text=DateFormat('dd-MM-yyyy').format(await selectDate(context));
+
                                   },
                                   child:
                                       Image.asset("assets/ic-calendar.png"))),
@@ -359,9 +417,15 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                           height: 10,
                         ),
                         TextField(
+                          style: GoogleFonts.poppins(
+                            color: Colors.black,
+                            fontSize: 13,
+                            fontWeight:
+                            FontWeight.w300),
                           controller:
                               ref.watch(textControllerProvider('end_date')),
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.only(left: 5),
                               enabledBorder: const OutlineInputBorder(
                                 borderSide: const BorderSide(
                                     color: AppColors.inputBorderColor,
@@ -371,7 +435,8 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                               filled: true,
                               suffixIcon: InkWell(
                                   onTap: () async {
-                                    await selectDate(context);
+                                    ref.read(textControllerProvider('end_date')).text=DateFormat('dd-MM-yyyy').format(await selectDate(context));
+
                                   },
                                   child:
                                       Image.asset("assets/ic-calendar.png"))),
@@ -396,9 +461,11 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                             backgroundColor: Colors.transparent,
                           ),
                           onPressed: () {
-                            addItem(Orders(
+                            addItem(
+                                Orders(
                                 allocatedJob: ref.read(dropdown2Provider)!,
                                 categoryName: ref.read(dropdown1Provider)!,
+                                id:FirebaseAuth.instance.currentUser?.uid,
                                 contactPersonName: ref
                                     .read(textControllerProvider(
                                       'contact_person_name',
@@ -422,7 +489,8 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                                       'order_rawMaterial',
                                     ))
                                     .text,
-                                id: 'lol'));
+                                )
+                            );
                           },
                           child: Text(
                             'Submit  Order',
@@ -440,6 +508,35 @@ class _OrderPageState extends ConsumerState<OrderPage> {
             ]),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ImageDialog extends StatelessWidget {
+  final image;
+  ImageDialog(this.image);
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Stack(
+        children: [
+          InteractiveViewer(
+            child: ClipRRect(
+
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                child: Image.file(File(image),fit: BoxFit.cover,width: 350,height: 300,)),
+          ),
+          Positioned(
+            right: 5,
+              top: -5,
+              child: IconButton(
+                icon: Icon(Icons.clear,size: 30,color: Colors.red,),
+                onPressed: () {
+                  Navigator.pop(context);
+
+          },))
+        ],
       ),
     );
   }

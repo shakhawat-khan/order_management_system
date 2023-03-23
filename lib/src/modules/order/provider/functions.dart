@@ -5,17 +5,25 @@ import 'package:image_picker/image_picker.dart';
 
 final ImagePicker picker = ImagePicker();
 
-Future<File> pickImageFromGallery() async {
-  final XFile? image = await picker.pickImage(
+List<XFile>? imageFileList = [];
+
+Future<List<XFile?>> pickImageFromGallery() async {
+  /*final XFile? image = await picker.pickImage(
     maxHeight: 700,
     maxWidth: 700,
     source: ImageSource.gallery,
-  );
+  );*/
 
-  return File(image!.path);
+  final List<XFile>? selectedImages = await picker.pickMultiImage();
+  if (selectedImages!.isNotEmpty) {
+    imageFileList!.addAll(selectedImages);
+  }
+  print("Image List Length:" + imageFileList!.length.toString());
+
+  return selectedImages;
 }
 
-Future<DateTime?> selectDate(BuildContext context) async {
+Future<DateTime> selectDate(BuildContext context) async {
   DateTime selectedDate = DateTime.now();
   final DateTime? picked = await showDatePicker(
       context: context,
@@ -23,5 +31,5 @@ Future<DateTime?> selectDate(BuildContext context) async {
       firstDate: DateTime(2015, 8),
       lastDate: DateTime(2101));
 
-  return picked;
+  return picked!;
 }

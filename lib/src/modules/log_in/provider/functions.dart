@@ -11,6 +11,7 @@ void signIntoFirebase(TextEditingController emailController,
     TextEditingController passwordController, BuildContext context) async {
   try {
     final user = FirebaseAuth.instance.currentUser;
+
     await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim());
