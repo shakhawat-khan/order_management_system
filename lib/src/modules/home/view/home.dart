@@ -85,12 +85,11 @@ class _HomePageState extends State<HomePage> {
                   value: 0,
                   onTap: () {
                     _perfService.removeCache('password').whenComplete(
-                            () => context.goNamed(AppRoute.logIn.name));
+                            () => context.pushReplacementNamed(AppRoute.logIn.name));
                   },
                   child:  Row(
                     children: [
                       SizedBox(width: 15,),
-
                       Icon(Icons.logout,size: 22,),
                       SizedBox(width: 10,),
                       Text("Log Out"),

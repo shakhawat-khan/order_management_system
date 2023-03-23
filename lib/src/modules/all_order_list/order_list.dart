@@ -81,12 +81,12 @@ class _OrderListState extends ConsumerState<OrderList> {
         title: Text('Order List',
             style:
                 GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.w500)),
-        leading: GestureDetector(
+        /*leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
           child: Image.asset("assets/back.png"),
-        ),
+        ),*/
         flexibleSpace: Container(
           decoration: BoxDecoration(gradient: appbackGroundgradent),
         ),
@@ -181,17 +181,14 @@ class _OrderListState extends ConsumerState<OrderList> {
                                         ],
                                       )),
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    deleteItem(totalOrders[index].orderId);
+                                IconButton(
 
-                                    print(totalOrders[index].orderId);
-                                    print('hello');
-                                  },
-                                  child: Container(
-                                    child: Image.asset("assets/ic-delete.png"),
-                                  ),
-                                ),
+                                    icon: Image.asset("assets/ic-delete.png"), onPressed: () {
+                                  deleteItem(totalOrders[index].orderId);
+
+                                  print(totalOrders[index].orderId);
+                                  print('hello');
+                                },),
                                 SizedBox(
                                   width: 30,
                                 )
