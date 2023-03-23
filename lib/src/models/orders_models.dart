@@ -19,7 +19,8 @@ class Orders {
     required this.endDate,
     required this.imagePath,
     required this.rawMaterial,
-    required this.id,
+    required this.orderId,
+    required this.userId,
   });
 
   String allocatedJob;
@@ -27,11 +28,12 @@ class Orders {
   String contactPersonName;
   String contactPersonNumber;
   String details;
-  int startDate;
-  int endDate;
+  String startDate;
+  String endDate;
   String imagePath;
   String rawMaterial;
-  String id;
+  String orderId;
+  String userId;
 
   factory Orders.fromJson(Map<String, dynamic> json) => Orders(
         allocatedJob: json["allocated_job"],
@@ -43,7 +45,8 @@ class Orders {
         endDate: json["end_date"],
         imagePath: json["image_path"],
         rawMaterial: json["raw_material"],
-        id: json["id"],
+        orderId: json["order_id"],
+        userId: json["user_id"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -56,6 +59,7 @@ class Orders {
         "end_date": endDate,
         "image_path": imagePath,
         "raw_material": rawMaterial,
-        "id": id,
+        "order_id": orderId,
+        "user_id": userId,
       };
 }

@@ -32,9 +32,9 @@ class _SplashState extends State<Splash> {
         print(value);
         if (value != null) {
           print('if');
-          return context.goNamed(AppRoute.home.name);
+          return context.pushReplacementNamed(AppRoute.home.name);
         } else {
-          return context.pushNamed(AppRoute.startScreen.name);
+          return context.pushReplacementNamed(AppRoute.startScreen.name);
         }
 
         //context.pushReplacementNamed(AppRoute.startScreen.name);

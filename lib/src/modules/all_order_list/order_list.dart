@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:order_management_system/src/models/orders_models.dart';
-import 'package:order_management_system/src/modules/order/provider/providers.dart';
 import 'package:order_management_system/src/utils/app_colors.dart';
 import 'package:order_management_system/src/utils/nav_utils.dart';
 
@@ -20,10 +20,15 @@ class OrderList extends ConsumerStatefulWidget {
 
 class _OrderListState extends ConsumerState<OrderList> {
   List<Orders> totalOrders = [];
+  final user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     // TODO: implement initState
-    FirebaseFirestore.instance.collection('orders').snapshots().listen((event) {
+    FirebaseFirestore.instance
+        .collection('orders')
+        .where('user_id', isEqualTo: user!.uid)
+        .snapshots()
+        .listen((event) {
       mapRecords(event);
     });
     fetchData();
@@ -31,14 +36,18 @@ class _OrderListState extends ConsumerState<OrderList> {
   }
 
   fetchData() async {
-    var records = await FirebaseFirestore.instance.collection('orders').get();
+    var records = await FirebaseFirestore.instance
+        .collection('orders')
+        .where('user_id', isEqualTo: user!.uid)
+        .get();
     mapRecords(records);
   }
 
   void mapRecords(QuerySnapshot<Map<String, dynamic>> records) {
     var list = records.docs
-        .map((order) => Orders(
-            id: order.id,
+        .map(
+          (order) => Orders(
+            orderId: order.id,
             allocatedJob: order['allocated_job'],
             categoryName: order['category_name'],
             contactPersonName: order['contact_person_name'],
@@ -47,12 +56,19 @@ class _OrderListState extends ConsumerState<OrderList> {
             startDate: order['start_date'],
             endDate: order['end_date'],
             imagePath: order['image_path'],
-            rawMaterial: order['raw_material']))
+            rawMaterial: order['raw_material'],
+            userId: order['user_id'],
+          ),
+        )
         .toList();
 
     setState(() {
       totalOrders = list;
     });
+  }
+
+  deleteItem(String id) {
+    FirebaseFirestore.instance.collection('orders').doc(id).delete();
   }
 
   @override
@@ -66,10 +82,11 @@ class _OrderListState extends ConsumerState<OrderList> {
             style:
                 GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.w500)),
         leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Image.asset("assets/back.png")),
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Image.asset("assets/back.png"),
+        ),
         flexibleSpace: Container(
           decoration: BoxDecoration(gradient: appbackGroundgradent),
         ),
@@ -164,8 +181,16 @@ class _OrderListState extends ConsumerState<OrderList> {
                                         ],
                                       )),
                                 ),
-                                Container(
-                                  child: Image.asset("assets/ic-delete.png"),
+                                InkWell(
+                                  onTap: () {
+                                    deleteItem(totalOrders[index].orderId);
+
+                                    print(totalOrders[index].orderId);
+                                    print('hello');
+                                  },
+                                  child: Container(
+                                    child: Image.asset("assets/ic-delete.png"),
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 30,

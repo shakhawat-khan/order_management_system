@@ -68,45 +68,45 @@ final dropdown2Provider = StateProvider<String?>((ref) {
   return null;
 });
 
-final FirebaseProvider =
-    NotifierProvider<FirebaseNotifier, List<Orders>>(FirebaseNotifier.new);
+// final FirebaseProvider =
+//     NotifierProvider<FirebaseNotifier, List<Orders>>(FirebaseNotifier.new);
 
-class FirebaseNotifier extends Notifier<List<Orders>> {
-  @override
-  build() {
-    FirebaseFirestore.instance.collection('orders').snapshots().listen((event) {
-      mapRecords(event);
-    });
-    fetchData();
-    //lenState();
-    return [];
-  }
+// class FirebaseNotifier extends Notifier<List<Orders>> {
+//   @override
+//   build() {
+//     FirebaseFirestore.instance.collection('orders').snapshots().listen((event) {
+//       mapRecords(event);
+//     });
+//     fetchData();
+//     //lenState();
+//     return [];
+//   }
 
-  Future<void> fetchData() async {
-    var records = await FirebaseFirestore.instance.collection('orders').get();
-    mapRecords(records);
-  }
+//   Future<void> fetchData() async {
+//     var records = await FirebaseFirestore.instance.collection('orders').get();
+//     mapRecords(records);
+//   }
 
-  void mapRecords(QuerySnapshot<Map<String, dynamic>> records) {
-    var list = records.docs
-        .map((order) => Orders(
-            id: order.id,
-            allocatedJob: order['allocated_job'],
-            categoryName: order['category_name'],
-            contactPersonName: order['contact_person_name'],
-            contactPersonNumber: order['contact_person_number'],
-            details: order['details'],
-            startDate: order['start_date'],
-            endDate: order['end_date'],
-            imagePath: order['image_path'],
-            rawMaterial: order['raw_material']))
-        .toList();
+//   void mapRecords(QuerySnapshot<Map<String, dynamic>> records) {
+//     var list = records.docs
+//         .map((order) => Orders(
+//             id: order.id,
+//             allocatedJob: order['allocated_job'],
+//             categoryName: order['category_name'],
+//             contactPersonName: order['contact_person_name'],
+//             contactPersonNumber: order['contact_person_number'],
+//             details: order['details'],
+//             startDate: order['start_date'],
+//             endDate: order['end_date'],
+//             imagePath: order['image_path'],
+//             rawMaterial: order['raw_material']))
+//         .toList();
 
-    state = [...list];
-  }
+//     state = [...list];
+//   }
 
-  int lenState() {
-    print(state.length.toString());
-    return state.length;
-  }
-}
+//   int lenState() {
+//     print(state.length.toString());
+//     return state.length;
+//   }
+// }

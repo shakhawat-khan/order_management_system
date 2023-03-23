@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -25,6 +26,7 @@ class OrderPage extends ConsumerStatefulWidget {
 }
 
 class _OrderPageState extends ConsumerState<OrderPage> {
+  final user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     // TODO: implement initState
@@ -396,33 +398,36 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                             backgroundColor: Colors.transparent,
                           ),
                           onPressed: () {
-                            addItem(Orders(
-                                allocatedJob: ref.read(dropdown2Provider)!,
-                                categoryName: ref.read(dropdown1Provider)!,
-                                contactPersonName: ref
-                                    .read(textControllerProvider(
-                                      'contact_person_name',
-                                    ))
-                                    .text,
-                                contactPersonNumber: ref
-                                    .read(textControllerProvider(
-                                      'contact_person_number',
-                                    ))
-                                    .text,
-                                details: ref
-                                    .read(textControllerProvider(
-                                      'order_description',
-                                    ))
-                                    .text,
-                                startDate: 0,
-                                endDate: 69,
-                                imagePath: 'test',
-                                rawMaterial: ref
-                                    .read(textControllerProvider(
-                                      'order_rawMaterial',
-                                    ))
-                                    .text,
-                                id: 'lol'));
+                            addItem(
+                              Orders(
+                                  orderId: '',
+                                  allocatedJob: ref.read(dropdown2Provider)!,
+                                  categoryName: ref.read(dropdown1Provider)!,
+                                  contactPersonName: ref
+                                      .read(textControllerProvider(
+                                        'contact_person_name',
+                                      ))
+                                      .text,
+                                  contactPersonNumber: ref
+                                      .read(textControllerProvider(
+                                        'contact_person_number',
+                                      ))
+                                      .text,
+                                  details: ref
+                                      .read(textControllerProvider(
+                                        'order_description',
+                                      ))
+                                      .text,
+                                  startDate: 'df',
+                                  endDate: '420',
+                                  imagePath: 'test',
+                                  rawMaterial: ref
+                                      .read(textControllerProvider(
+                                        'order_rawMaterial',
+                                      ))
+                                      .text,
+                                  userId: user!.uid.toString()),
+                            );
                           },
                           child: Text(
                             'Submit  Order',
