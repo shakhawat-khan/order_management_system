@@ -6,22 +6,22 @@ import 'package:order_management_system/src/provider/providers.dart';
 
 DatabaseReference refs = FirebaseDatabase.instance.ref("users");
 
-void signUptoFirebase(
+UserCredential ?credential;
+Future<UserCredential?> signUptoFirebase(
     TextEditingController emailController,
     TextEditingController passwordController,
     BuildContext context,
     WidgetRef ref) async {
   try {
-    final credential =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+     credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
     );
 
-    if (context.mounted) {
+    return credential;
+    /*if (context.mounted) {
       if (credential.additionalUserInfo!.isNewUser == true) {
-        DatabaseReference databaseReference =
-            FirebaseDatabase.instance.ref("user/${credential.user?.uid}");
+        DatabaseReference databaseReference = FirebaseDatabase.instance.ref("user/${credential.user?.uid}");
         print(
             "the onpress call is initiated..................${credential.user?.uid}");
         await databaseReference.set({
@@ -35,13 +35,13 @@ void signUptoFirebase(
           'owner designation': {
             ref.read(textControllerProvider('signup_designation'))
           }
-
           //'owner name': {ref.read(textControllerProvider(''))},
-        }).then((value) {});
+        }
+        ).then((value) {});
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             backgroundColor: Colors.green, content: Text("sign up success")));
       }
-    }
+    }*/
   } on FirebaseAuthException catch (e) {
     if (e.code == 'weak-password') {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -55,6 +55,7 @@ void signUptoFirebase(
           backgroundColor: Colors.red,
           content: Text("The account already exists for that email.")));
     }
+
   } catch (e) {
     print(e);
   }

@@ -38,14 +38,18 @@ class _OrderPageState extends ConsumerState<OrderPage> {
     super.initState();
   }
 
+  bool _isLoading =false;
   TextEditingController dateStart = TextEditingController();
   TextEditingController dateEnd = TextEditingController();
 
-  addItem(Orders orders) {
+ /* addItem(Orders orders) {
 
-    FirebaseFirestore.instance.collection('orders').add(orders.toJson());
+
+    setState(() {
+      _isLoading=false;
+    });
     //FirebaseFirestore.instance.collection("${userId}").add(orders.toJson());
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +69,7 @@ class _OrderPageState extends ConsumerState<OrderPage> {
           decoration: BoxDecoration(gradient: appbackGroundgradent),
         ),
       ),
-      body: Container(
+      body: _isLoading ==false?Container(
         decoration: BoxDecoration(gradient: appbackGroundgradent),
         child: SingleChildScrollView(
           child: Container(
@@ -216,11 +220,10 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                       isExpanded: true,
                       icon: Image.asset("assets/ic-downarrow-dropdown.png"),
                       underline: SizedBox(),
-                      hint: Flexible(
-                          child: Text(
+                      hint: Text(
                         'Category Name',
                         style: kTextStylePoppinsTitel,
-                      )),
+                      ),
                       items: <String>['Sample Order', 'Final Order']
                           .map((String value) {
                         return DropdownMenuItem<String>(
@@ -385,7 +388,7 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                               FontWeight.w300),
                           controller: ref.watch(textControllerProvider('start_date')),
                           decoration: InputDecoration(
-                              contentPadding: EdgeInsets.only(left: 5),
+                              contentPadding: EdgeInsets.only(left: 15),
                               enabledBorder: const OutlineInputBorder(
                                 borderSide: const BorderSide(
                                     color: AppColors.inputBorderColor,
@@ -425,7 +428,7 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                           controller:
                               ref.watch(textControllerProvider('end_date')),
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(left: 5),
+                            contentPadding: EdgeInsets.only(left: 15),
                               enabledBorder: const OutlineInputBorder(
                                 borderSide: const BorderSide(
                                     color: AppColors.inputBorderColor,
@@ -461,36 +464,40 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                             backgroundColor: Colors.transparent,
                           ),
                           onPressed: () {
-                            addItem(
-                              Orders(
-                                  orderId: '',
-                                  allocatedJob: ref.read(dropdown2Provider)!,
-                                  categoryName: ref.read(dropdown1Provider)!,
-                                  contactPersonName: ref
-                                      .read(textControllerProvider(
-                                        'contact_person_name',
-                                      ))
-                                      .text,
-                                  contactPersonNumber: ref
-                                      .read(textControllerProvider(
-                                        'contact_person_number',
-                                      ))
-                                      .text,
-                                  details: ref
-                                      .read(textControllerProvider(
-                                        'order_description',
-                                      ))
-                                      .text,
-                                  startDate: 'df',
-                                  endDate: '420',
-                                  imagePath: 'test',
-                                  rawMaterial: ref
-                                      .read(textControllerProvider(
-                                        'order_rawMaterial',
-                                      ))
-                                      .text,
-                                  userId: user!.uid.toString()),
-                            );
+                            setState(() {
+                              _isLoading =false;
+                            });
+                            var data =  Orders(
+                                orderId: '',
+                                allocatedJob: ref.read(dropdown2Provider)!,
+                                categoryName: ref.read(dropdown1Provider)!,
+                                contactPersonName: ref
+                                    .read(textControllerProvider(
+                                  'contact_person_name',
+                                ))
+                                    .text,
+                                contactPersonNumber: ref
+                                    .read(textControllerProvider(
+                                  'contact_person_number',
+                                ))
+                                    .text,
+                                details: ref
+                                    .read(textControllerProvider(
+                                  'order_description',
+                                ))
+                                    .text,
+                                startDate: 'df',
+                                endDate: '420',
+                                imagePath: 'test',
+                                rawMaterial: ref
+                                    .read(textControllerProvider(
+                                  'order_rawMaterial',
+                                ))
+                                    .text,
+                                userId: user!.uid.toString());
+                            FirebaseFirestore.instance.collection('orders').add(data.toJson()).then((value) {
+
+                            });
                           },
                           child: Text(
                             'Submit  Order',
@@ -508,7 +515,9 @@ class _OrderPageState extends ConsumerState<OrderPage> {
             ]),
           ),
         ),
-      ),
+      ):Container(
+          decoration: BoxDecoration(gradient: appbackGroundgradent),
+          child: Center(child: CircularProgressIndicator())),
     );
   }
 }

@@ -16,7 +16,7 @@ class UsersData {
     required this.ownerDesignation,
     required this.ownerName,
     required this.password,
-    required this.userId,
+    this.userId,
   });
 
   String email;
@@ -25,7 +25,7 @@ class UsersData {
   String ownerDesignation;
   String ownerName;
   String password;
-  String userId;
+  String? userId;
 
   factory UsersData.fromJson(Map<String, dynamic> json) => UsersData(
         email: json["email"],

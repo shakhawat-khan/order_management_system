@@ -26,36 +26,34 @@ class SignUp extends ConsumerStatefulWidget {
 }
 
 class _SignUpState extends ConsumerState<SignUp> {
-  List<UsersData> totalUser = [];
-  final user = FirebaseAuth.instance.currentUser;
+  /*List<UsersData> totalUser = [];
+  final user = FirebaseAuth.instance.currentUser;*/
 
   @override
   void initState() {
-    FirebaseFirestore.instance
+    /*FirebaseFirestore.instance
         .collection('orders')
         .where('user_id', isEqualTo: user!.uid)
         .snapshots()
         .listen((event) {
       mapRecords(event);
-    });
+    });*/
 
-    fetchData();
+   // fetchData();
 
     // TODO: implement initState
     super.initState();
   }
 
-  fetchData() async {
+/*  fetchData() async {
     var records = await FirebaseFirestore.instance
         .collection('user_info')
         .where('user_id', isEqualTo: user!.uid)
         .get();
     mapRecords(records);
-  }
+  }*/
 
-  addItem(UsersData user) {
-    FirebaseFirestore.instance.collection('user_info').add(user.toJson());
-  }
+  bool _isloading =false;
 
   void mapRecords(QuerySnapshot<Map<String, dynamic>> records) {
     var list = records.docs
@@ -73,7 +71,7 @@ class _SignUpState extends ConsumerState<SignUp> {
         .toList();
 
     setState(() {
-      totalUser = list;
+     // totalUser = list;
     });
   }
 
@@ -102,7 +100,7 @@ class _SignUpState extends ConsumerState<SignUp> {
           decoration: BoxDecoration(gradient: appbackGroundgradent),
         ),
       ),
-      body: Container(
+      body:_isloading==false? Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(gradient: appbackGroundgradent),
@@ -170,9 +168,7 @@ class _SignUpState extends ConsumerState<SignUp> {
                       hintText: 'Enter your Email',
                       prefixIcon: Icon(Icons.abc),
                       labelText: 'Email'),
-                  controller: ref.watch(
-                    textControllerProvider('signup_email'),
-                  ),
+                  controller: ref.watch(textControllerProvider('signup_email'),),
                 ),
                 gapH20,
                 Text(
@@ -216,9 +212,7 @@ class _SignUpState extends ConsumerState<SignUp> {
                     prefixIcon: const Icon(Icons.password),
                     labelText: 'Password',
                   ),
-                  controller: ref.watch(
-                    textControllerProvider('signup_password'),
-                  ),
+                  controller: ref.watch(textControllerProvider('signup_password'),),
                 ),
                 gapH20,
                 Text(
@@ -347,8 +341,15 @@ class _SignUpState extends ConsumerState<SignUp> {
                 gapH48,
                 InkWell(
                   onTap: () {
-                    addItem(
-                      UsersData(
+                    setState(() {
+                      _isloading=true;
+                    });
+                    signUptoFirebase(
+                      ref.watch(textControllerProvider('signup_email'),),
+                      ref.watch(textControllerProvider('signup_password'),),
+                      context,
+                      ref).then((value) async {
+                     var data =  UsersData(
                         email: ref
                             .watch(textControllerProvider('signup_email'))
                             .text,
@@ -367,9 +368,16 @@ class _SignUpState extends ConsumerState<SignUp> {
                         password: ref
                             .watch(textControllerProvider('signup_password'))
                             .text,
-                        userId: user!.uid.toString(),
-                      ),
-                    );
+                        userId: value?.user?.uid,
+                      );
+                      await FirebaseFirestore.instance.collection('user_info').doc("${data.userId}").set(data.toJson()).then((value) {
+                        setState(() {
+                          _isloading=false;
+                        });
+                        context.pushReplacementNamed(AppRoute.home.name);
+                      });
+                    });
+
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,
@@ -391,7 +399,12 @@ class _SignUpState extends ConsumerState<SignUp> {
             ),
           ),
         ),
-      ),
+      ):Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(gradient: appbackGroundgradent),
+
+          child: Center(child: CircularProgressIndicator())),
     );
   }
 }
