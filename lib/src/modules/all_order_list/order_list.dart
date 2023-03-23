@@ -24,23 +24,39 @@ class _OrderListState extends ConsumerState<OrderList> {
   @override
   void initState() {
     // TODO: implement initState
-    FirebaseFirestore.instance
-        .collection('orders')
-        .where('user_id', isEqualTo: user!.uid)
-        .snapshots()
-        .listen((event) {
-      mapRecords(event);
-    });
+
+    if (user!.uid == '8CPgxNn0WiPXk1eFgSh10FkZjNJ2') {
+      FirebaseFirestore.instance
+          .collection('orders')
+          .snapshots()
+          .listen((event) {
+        mapRecords(event);
+      });
+    } else {
+      FirebaseFirestore.instance
+          .collection('orders')
+          .where('user_id', isEqualTo: user!.uid)
+          .snapshots()
+          .listen((event) {
+        mapRecords(event);
+      });
+    }
+
     fetchData();
     super.initState();
   }
 
   fetchData() async {
-    var records = await FirebaseFirestore.instance
-        .collection('orders')
-        .where('user_id', isEqualTo: user!.uid)
-        .get();
-    mapRecords(records);
+    if (user!.uid == '8CPgxNn0WiPXk1eFgSh10FkZjNJ2') {
+      var records = await FirebaseFirestore.instance.collection('orders').get();
+      mapRecords(records);
+    } else {
+      var records = await FirebaseFirestore.instance
+          .collection('orders')
+          .where('user_id', isEqualTo: user!.uid)
+          .get();
+      mapRecords(records);
+    }
   }
 
   void mapRecords(QuerySnapshot<Map<String, dynamic>> records) {

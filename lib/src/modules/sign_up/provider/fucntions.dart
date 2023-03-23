@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:order_management_system/src/provider/providers.dart';
 
-DatabaseReference ref = FirebaseDatabase.instance.ref("users");
+DatabaseReference refs = FirebaseDatabase.instance.ref("users");
 
 void signUptoFirebase(
     TextEditingController emailController,
