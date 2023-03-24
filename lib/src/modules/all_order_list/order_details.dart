@@ -1,11 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:order_management_system/src/utils/app_colors.dart';
 
+import '../../models/orders_models.dart';
 import '../../utils/font_style.dart';
 
 class OrderDetails extends StatefulWidget {
-  const OrderDetails({Key? key}) : super(key: key);
+  //const OrderDetails({Key? key}) : super(key: key);
+  Orders orders;
+  OrderDetails(this.orders);
 
   @override
   _OrderDetailsState createState() => _OrderDetailsState();
@@ -58,7 +62,7 @@ class _OrderDetailsState extends State<OrderDetails> {
 
               height: 200,
               child: PageView.builder(
-                itemCount: SliderImages.length,
+                itemCount: widget.orders.productImage.length,
                   controller: _pageController,
                   physics: BouncingScrollPhysics(),
                   pageSnapping: true,
@@ -71,14 +75,14 @@ class _OrderDetailsState extends State<OrderDetails> {
                   itemBuilder: (context,item){
                   return Container(
 
-                    child: Image.asset("${SliderImages[item]}"),);
+                    child: Image.network("${widget.orders.productImage[item]}"),);
                   }
               ),
             ),
             SizedBox(height: 10,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: indicators(SliderImages.length,activePage),
+              children: indicators(widget.orders.productImage.length,activePage),
             ),
             SizedBox(height: 10,),
             Expanded(
@@ -91,7 +95,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   children: [
                     SizedBox(height: 20,),
                     Container(
-                        child: Text("Date - 23 Feb 2023 - 28 Feb 2023",style: GoogleFonts.poppins(color:Colors.white,fontSize: 15, fontWeight: FontWeight.w300) ,)),
+                        child: Text("${widget.orders.startDate} -- ${widget.orders.endDate}",style: GoogleFonts.poppins(color:Colors.white,fontSize: 15, fontWeight: FontWeight.w300) ,)),
                     Expanded(
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -113,7 +117,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 ),
                                 Spacer(),
                                 Text(
-                                  'Sample',
+                                  '${widget.orders.categoryName!=null?widget.orders.categoryName:"Final Order"}',
                                   style:  GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color:AppColors.bottomNavigationBackgrundEnd),
                                 ),
                                 SizedBox(width: 20,),
@@ -129,7 +133,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 ),
                                 Spacer(),
                                 Text(
-                                  'Design',
+                                  '${widget.orders.allocatedJob!=null?widget.orders.allocatedJob:"Design"}',
                                   style:  GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color:AppColors.bottomNavigationBackgrundEnd),
                                 ),
                                 SizedBox(width: 20,),
@@ -152,14 +156,13 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 Container(
                                   width: 285,
                                   child: Text(
-                                    'Remains of ancient build exist in the neighborhood ancient build exist in the',
+                                    '${widget.orders.rawMaterial!=""?widget.orders.rawMaterial:"Remains of ancient build exist in the neighborhood ancient build exist in the"}',
                                     style:  GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w300,color: Colors.black),
                                   ),
                                 ),
 
                               ],
                             ),
-
                             SizedBox(height: 15,),
                             Row(
                               children: [
@@ -177,7 +180,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 Container(
                                   width: 285,
                                   child: Text(
-                                    'Remains of ancient build exist in the neighborhood ancient build exist in the',
+                                    '${widget.orders.details!="" ?widget.orders.details:"Remains of ancient build exist in the neighborhood ancient build exist in the"}',
                                     style:  GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w300,color: Colors.black),
                                   ),
                                 ),
@@ -194,14 +197,12 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 ),
                                 Spacer(),
                                 Text(
-                                  'John Smith',
+                                  '${widget.orders.contactPersonName!=""?widget.orders.contactPersonName:"No Name avilable"}',
                                   style:  GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color:AppColors.bottomNavigationBackgrundEnd),
                                 ),
                                 SizedBox(width: 20,),
                               ],
                             ),
-
-
                             SizedBox(height: 15,),
                             Row(
                               children: [
@@ -212,24 +213,30 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 ),
                                 Spacer(),
                                 Text(
-                                  '01758926754',
+                                  '${widget.orders.contactPersonNumber!=""?widget.orders.contactPersonNumber:"No Number avilable"}',
                                   style:  GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500,color:AppColors.bottomNavigationBackgrundEnd),
                                 ),
                                 SizedBox(width: 20,),
                               ],
                             ),
                             SizedBox(height: 30,),
-                            Container(
-                              height: 50,
-                              width: 285,
-                              margin: EdgeInsets.only(left: 15,right: 15),
-                              decoration: BoxDecoration(
-                                  color: AppColors.redButtonBackColor.withOpacity(0.96)
-                              ),
-                              child:Center(
-                                child: Text(
-                                  'Cancel Order',
-                                  style:  GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w600,color: Colors.white),
+                            GestureDetector(
+                              onTap: (){
+                                FirebaseFirestore.instance.collection('orders').doc(widget.orders.orderId).delete();
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                height: 50,
+                                width: 285,
+                                margin: EdgeInsets.only(left: 15,right: 15),
+                                decoration: BoxDecoration(
+                                    color: AppColors.redButtonBackColor.withOpacity(0.96)
+                                ),
+                                child:Center(
+                                  child: Text(
+                                    'Cancel Order',
+                                    style:  GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w600,color: Colors.white),
+                                  ),
                                 ),
                               ),
                             )

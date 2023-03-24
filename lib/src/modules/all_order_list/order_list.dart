@@ -30,6 +30,7 @@ class _OrderListState extends ConsumerState<OrderList> {
           .collection('orders')
           .snapshots()
           .listen((event) {
+        print("the event is ....${event}");
         mapRecords(event);
       });
     } else {
@@ -38,6 +39,7 @@ class _OrderListState extends ConsumerState<OrderList> {
           .where('user_id', isEqualTo: user!.uid)
           .snapshots()
           .listen((event) {
+            print("the event is ....${event}");
         mapRecords(event);
       });
     }
@@ -60,6 +62,7 @@ class _OrderListState extends ConsumerState<OrderList> {
   }
 
   void mapRecords(QuerySnapshot<Map<String, dynamic>> records) {
+    print("the recods is.........${records.docs.map((e) =>e["productImage"])}");
     var list = records.docs
         .map(
           (order) => Orders(
@@ -74,11 +77,13 @@ class _OrderListState extends ConsumerState<OrderList> {
             imagePath: order['image_path'],
             rawMaterial: order['raw_material'],
             userId: order['user_id'],
+          productImage: order['productImage'],
           ),
         )
         .toList();
 
     setState(() {
+      print("the list is ...${list}");
       totalOrders = list;
     });
   }
@@ -107,119 +112,116 @@ class _OrderListState extends ConsumerState<OrderList> {
           decoration: BoxDecoration(gradient: appbackGroundgradent),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(gradient: appbackGroundgradent),
-          child: Column(
-            children: [
-              ListView.builder(
-                  itemCount: totalOrders.length,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            NavUtils.push(context, OrderDetails());
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 112,
-                            margin: EdgeInsets.only(left: 20, right: 20),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  blurRadius: 2,
-                                  offset: Offset(1, 3), // Shadow position
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 105,
-                                  height: 112,
-                                  decoration: BoxDecoration(
-                                      color: AppColors.listItemContainerColor),
-                                  child: Center(
-                                      child: Image.asset(
-                                          "assets/image-cocki.png")),
-                                ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                Expanded(
-                                  child: Container(
-                                      decoration:
-                                          BoxDecoration(color: Colors.white),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            totalOrders[index].categoryName,
-                                            style: GoogleFonts.poppins(
-                                                color: Colors.black,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Container(
-                                              width: 157,
-                                              child: Text(
-                                                "Remains of ancient build",
-                                                style: GoogleFonts.poppins(
-                                                    color: AppColors
-                                                        .listItemfontsmalColor,
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w300),
-                                              )),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Container(
-                                              child: Text(
-                                            "23 Feb 2023 - 28 Feb 2023",
-                                            style: GoogleFonts.poppins(
-                                                color: Colors.black,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w300),
-                                          )),
-                                        ],
-                                      )),
-                                ),
-                                IconButton(
+      body: Container(
+        decoration: BoxDecoration(gradient: appbackGroundgradent),
+        child: ListView(
+          children: [
+            ListView.builder(
+                itemCount: totalOrders.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          NavUtils.push(context, OrderDetails(totalOrders[index]));
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 112,
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                blurRadius: 2,
+                                offset: Offset(1, 3), // Shadow position
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 105,
+                                height: 112,
+                                decoration: BoxDecoration(
+                                    color: AppColors.listItemContainerColor),
+                                child: Center(
+                                    child: Image.network(
+                                        "${totalOrders[index].productImage[0]}")),
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Expanded(
+                                child: Container(
+                                    decoration:
+                                        BoxDecoration(color: Colors.white),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          totalOrders[index].categoryName,
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Container(
+                                            width: 157,
+                                            child: Text(
+                                              "${totalOrders[index].allocatedJob}",
+                                              style: GoogleFonts.poppins(
+                                                  color: AppColors
+                                                      .listItemfontsmalColor,
+                                                  fontSize: 12,
+                                                  fontWeight:
+                                                      FontWeight.w300),
+                                            )),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Container(
+                                            child: Text(
+                                          "${totalOrders[index].startDate}- ${totalOrders[index].endDate}",
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.black,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w300),
+                                        )),
+                                      ],
+                                    )),
+                              ),
+                              IconButton(
 
-                                    icon: Image.asset("assets/ic-delete.png"), onPressed: () {
-                                  deleteItem(totalOrders[index].orderId);
+                                  icon: Image.asset("assets/ic-delete.png",height: 25,width: 25,fit: BoxFit.contain,), onPressed: () {
+                                deleteItem(totalOrders[index].orderId);
 
-                                  print(totalOrders[index].orderId);
-                                  print('hello');
-                                },),
-                                SizedBox(
-                                  width: 30,
-                                )
-                              ],
-                            ),
+                                print(totalOrders[index].orderId);
+                                print('hello');
+                              },),
+                              SizedBox(
+                                width: 30,
+                              )
+                            ],
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    );
-                  })
-            ],
-          ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  );
+                })
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(

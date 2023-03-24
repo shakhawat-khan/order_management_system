@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -41,6 +42,7 @@ class _OrderPageState extends ConsumerState<OrderPage> {
   bool _isLoading =false;
   TextEditingController dateStart = TextEditingController();
   TextEditingController dateEnd = TextEditingController();
+  List<String>downlaodImages =[];
 
  /* addItem(Orders orders) {
 
@@ -69,7 +71,7 @@ class _OrderPageState extends ConsumerState<OrderPage> {
           decoration: BoxDecoration(gradient: appbackGroundgradent),
         ),
       ),
-      body: _isLoading ==false?Container(
+      body: _isLoading ==false? Container(
         decoration: BoxDecoration(gradient: appbackGroundgradent),
         child: SingleChildScrollView(
           child: Container(
@@ -465,39 +467,87 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                           ),
                           onPressed: () {
                             setState(() {
-                              _isLoading =false;
+                              _isLoading =true;
                             });
-                            var data =  Orders(
-                                orderId: '',
-                                allocatedJob: ref.read(dropdown2Provider)!,
-                                categoryName: ref.read(dropdown1Provider)!,
-                                contactPersonName: ref
-                                    .read(textControllerProvider(
-                                  'contact_person_name',
-                                ))
-                                    .text,
-                                contactPersonNumber: ref
-                                    .read(textControllerProvider(
-                                  'contact_person_number',
-                                ))
-                                    .text,
-                                details: ref
-                                    .read(textControllerProvider(
-                                  'order_description',
-                                ))
-                                    .text,
-                                startDate: 'df',
-                                endDate: '420',
-                                imagePath: 'test',
-                                rawMaterial: ref
-                                    .read(textControllerProvider(
-                                  'order_rawMaterial',
-                                ))
-                                    .text,
-                                userId: user!.uid.toString());
-                            FirebaseFirestore.instance.collection('orders').add(data.toJson()).then((value) {
+                            if(ref.read(pickImageProvider).length>0){
+                              uploadImage(ref.read(pickImageProvider)).then((value) {
+                                print("the total array size is ${value}");
+                                var data =  Orders(
+                                    orderId: '',
+                                    allocatedJob: ref.read(dropdown2Provider)!,
+                                    categoryName: ref.read(dropdown1Provider)!,
+                                    contactPersonName: ref
+                                        .read(textControllerProvider(
+                                      'contact_person_name',
+                                    ))
+                                        .text,
+                                    contactPersonNumber: ref
+                                        .read(textControllerProvider(
+                                      'contact_person_number',
+                                    ))
+                                        .text,
+                                    details: ref
+                                        .read(textControllerProvider(
+                                      'order_description',
+                                    ))
+                                        .text,
+                                    startDate: '${ref.read(textControllerProvider('start_date')).text}',
+                                    endDate: '${ref.read(textControllerProvider('end_date')).text}',
+                                    imagePath: 'test',
+                                    rawMaterial: ref
+                                        .read(textControllerProvider(
+                                      'order_rawMaterial',
+                                    ))
+                                        .text,
+                                    userId: user!.uid.toString(),
+                                    productImage:downlaodImages);
 
-                            });
+                                print("data formate ....${data.toJson()}");
+                                FirebaseFirestore.instance.collection('orders').add(data.toJson()).then((value) {
+                                  _isLoading =true;
+                                  context.pop(AppRoute.orderList.name);
+                                });
+                              });
+                            }else{
+                              var data =  Orders(
+                                  orderId: '',
+                                  allocatedJob: ref.read(dropdown2Provider)!,
+                                  categoryName: ref.read(dropdown1Provider)!,
+                                  contactPersonName: ref
+                                      .read(textControllerProvider(
+                                    'contact_person_name',
+                                  ))
+                                      .text,
+                                  contactPersonNumber: ref
+                                      .read(textControllerProvider(
+                                    'contact_person_number',
+                                  ))
+                                      .text,
+                                  details: ref
+                                      .read(textControllerProvider(
+                                    'order_description',
+                                  ))
+                                      .text,
+                                  startDate: '${ref.read(textControllerProvider('start_date')).text}',
+                                  endDate: '${ref.read(textControllerProvider('end_date')).text}',
+                                  imagePath: 'test',
+                                  rawMaterial: ref
+                                      .read(textControllerProvider(
+                                    'order_rawMaterial',
+                                  ))
+                                      .text,
+                                  userId: user!.uid.toString(), productImage: ["asdfasdf","asdfasdf"],
+                                  );
+
+                              print("data formate ....${data.toJson()}");
+                              FirebaseFirestore.instance.collection('orders').add(data.toJson()).then((value) {
+                                _isLoading =true;
+                                context.pop(AppRoute.orderList.name);
+                              });
+                            }
+
+
+
                           },
                           child: Text(
                             'Submit  Order',
@@ -516,9 +566,29 @@ class _OrderPageState extends ConsumerState<OrderPage> {
           ),
         ),
       ):Container(
+        height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(gradient: appbackGroundgradent),
           child: Center(child: CircularProgressIndicator())),
     );
+  }
+
+
+
+  Future<List<String>> uploadImage(var imageFile ) async {
+
+    //final ref = FirebaseStorage.instance.ref().child("images/${Path.from(imageFile.path)}");
+    for(XFile simg in imageFile){
+      var ref = FirebaseStorage.instance.ref().child("images/${simg.path}");
+      await ref.putFile(File(simg.path)).whenComplete(()async {
+        await ref.getDownloadURL().then((value) {
+          print("image link ....${value}");
+          downlaodImages.add(value);
+        });
+      });
+    }
+
+    return downlaodImages;
   }
 }
 

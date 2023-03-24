@@ -21,6 +21,7 @@ class Orders {
     required this.rawMaterial,
     required this.orderId,
     required this.userId,
+     required this.productImage,
   });
 
   String allocatedJob;
@@ -34,6 +35,8 @@ class Orders {
   String rawMaterial;
   String orderId;
   String userId;
+  List<dynamic>productImage;
+
 
   factory Orders.fromJson(Map<String, dynamic> json) => Orders(
         allocatedJob: json["allocated_job"],
@@ -47,6 +50,7 @@ class Orders {
         rawMaterial: json["raw_material"],
         orderId: json["order_id"],
         userId: json["user_id"],
+        productImage: json["productImage"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -61,5 +65,6 @@ class Orders {
         "raw_material": rawMaterial,
         "order_id": orderId,
         "user_id": userId,
+        "productImage": productImage,
       };
 }
