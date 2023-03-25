@@ -18,18 +18,19 @@ Future<UserCredential?> signUptoFirebase(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
     );
-    // if (user!.uid == '8CPgxNn0WiPXk1eFgSh10FkZjNJ2') {
-    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //       backgroundColor: Colors.green,
-    //       content: Text(" Admin Log In success")));
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //       backgroundColor: Colors.green,
-    //       content: Text(" User Log In success")));
-    // }
 
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        backgroundColor: Colors.green, content: Text(" User Log In success")));
+    if (user!.uid == '8CPgxNn0WiPXk1eFgSh10FkZjNJ2') {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.green,
+          content: Text(" Admin Log In success")));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.green,
+          content: Text(" User Log In success")));
+    }
+
+    // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //     backgroundColor: Colors.green, content: Text(" User Log In success")));
 
     return credential;
     /*if (context.mounted) {

@@ -52,6 +52,7 @@ dependencies:
   fl_chart: ^0.61.0
   shared_preferences: ^2.0.18
   firebase_storage: ^11.0.16
+  fluttertoast: ^8.2.1
 
 
 

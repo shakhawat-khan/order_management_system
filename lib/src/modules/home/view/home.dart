@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:order_management_system/src/constants/app_sizes.dart';
 import 'package:order_management_system/src/modules/home/components/drawer.dart';
@@ -26,6 +28,42 @@ int currentIndexwidget = 0;
 class _HomePageState extends State<HomePage> {
   PrefService _perfService = PrefService();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final user = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    if (user!.uid == '8CPgxNn0WiPXk1eFgSh10FkZjNJ2') {
+      Fluttertoast.showToast(
+          msg: " Admin Log In success",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      //     backgroundColor: Colors.green,
+      //     content: Text(" Admin Log In success")));
+      // print(user!.uid);
+      print('object admin');
+    } else {
+      Fluttertoast.showToast(
+          msg: " User Log In success",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      //     backgroundColor: Colors.green,
+      //     content: Text(" User Log In success")));
+
+      print('user');
+    }
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
