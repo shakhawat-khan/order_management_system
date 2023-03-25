@@ -6,17 +6,30 @@ import 'package:order_management_system/src/provider/providers.dart';
 
 DatabaseReference refs = FirebaseDatabase.instance.ref("users");
 
-UserCredential ?credential;
+UserCredential? credential;
+final user = FirebaseAuth.instance.currentUser;
 Future<UserCredential?> signUptoFirebase(
     TextEditingController emailController,
     TextEditingController passwordController,
     BuildContext context,
     WidgetRef ref) async {
   try {
-     credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
     );
+    // if (user!.uid == '8CPgxNn0WiPXk1eFgSh10FkZjNJ2') {
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //       backgroundColor: Colors.green,
+    //       content: Text(" Admin Log In success")));
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //       backgroundColor: Colors.green,
+    //       content: Text(" User Log In success")));
+    // }
+
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: Colors.green, content: Text(" User Log In success")));
 
     return credential;
     /*if (context.mounted) {
@@ -55,8 +68,8 @@ Future<UserCredential?> signUptoFirebase(
           backgroundColor: Colors.red,
           content: Text("The account already exists for that email.")));
     }
-
   } catch (e) {
     print(e);
   }
+  return null;
 }
