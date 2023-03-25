@@ -39,7 +39,7 @@ class _SignUpState extends ConsumerState<SignUp> {
       mapRecords(event);
     });*/
 
-   // fetchData();
+    // fetchData();
 
     // TODO: implement initState
     super.initState();
@@ -53,7 +53,7 @@ class _SignUpState extends ConsumerState<SignUp> {
     mapRecords(records);
   }*/
 
-  bool _isloading =false;
+  bool _isloading = false;
 
   void mapRecords(QuerySnapshot<Map<String, dynamic>> records) {
     var list = records.docs
@@ -71,7 +71,7 @@ class _SignUpState extends ConsumerState<SignUp> {
         .toList();
 
     setState(() {
-     // totalUser = list;
+      // totalUser = list;
     });
   }
 
@@ -100,170 +100,156 @@ class _SignUpState extends ConsumerState<SignUp> {
           decoration: BoxDecoration(gradient: appbackGroundgradent),
         ),
       ),
-      body:_isloading==false? Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(gradient: appbackGroundgradent),
-        child: Container(
-          margin: EdgeInsets.only(left: 20, right: 20),
-          child: Form(
-            key: formKeySignup,
-            child: ListView(
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              children: [
-                Text(
-                  'Full Name',
-                  style: kTextStylePoppinsTitel,
-                ),
-                gapH16,
-                TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value!.isEmpty == true) {
-                      return 'please enter name';
-                    }
-                    return null;
-                  },
-                  controller: ref.watch(
-                    textControllerProvider('signup_name'),
-                  ),
-                  decoration: const InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.inputBorderColor,
-                          width: 0.5,
-                        ),
-                      ),
-                      fillColor: Colors.white,
-                      filled: true,
-                      prefixIcon: Icon(Icons.abc),
-                      hintText: 'Enter your full Name',
-                      labelText: 'Name'),
-                ),
-                gapH20,
-                Text(
-                  'Email',
-                  style: kTextStylePoppinsTitel,
-                ),
-                gapH16,
-                TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value!.isEmail != true) {
-                      return 'please enter valid email';
-                    }
-                    return null;
-                  },
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.inputBorderColor,
-                          width: 0.5,
-                        ),
-                      ),
-                      fillColor: Colors.white,
-                      filled: true,
-                      hintText: 'Enter your Email',
-                      prefixIcon: Icon(Icons.abc),
-                      labelText: 'Email'),
-                  controller: ref.watch(textControllerProvider('signup_email'),),
-                ),
-                gapH20,
-                Text(
-                  'Password',
-                  style: kTextStylePoppinsTitel,
-                ),
-                gapH16,
-                TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value!.length < 8) {
-                      return 'password must be 8 character or more';
-                    }
-
-                    return null;
-                  },
-                  obscureText: passwordVisible,
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.inputBorderColor,
-                        width: 0.5,
-                      ),
-                    ),
-                    fillColor: Colors.white,
-                    filled: true,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        passwordVisible
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        color: Theme.of(context).primaryColorDark,
-                      ),
-                      onPressed: () {
-                        ref
-                            .read(passwordProvider.notifier)
-                            .visible(!passwordVisible);
-                      },
-                    ),
-                    hintText: 'Enter your Password',
-                    prefixIcon: const Icon(Icons.password),
-                    labelText: 'Password',
-                  ),
-                  controller: ref.watch(textControllerProvider('signup_password'),),
-                ),
-                gapH20,
-                Text(
-                  'Mobile Number',
-                  style: kTextStylePoppinsTitel,
-                ),
-                gapH16,
-                TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value!.isEmpty == true) {
-                      return 'please enter Mobile number';
-                    }
-                    return null;
-                  },
-                  keyboardType: TextInputType.number,
-                  controller:
-                      ref.watch(textControllerProvider('signup_mobile')),
-                  decoration: const InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.inputBorderColor,
-                        width: 0.5,
-                      ),
-                    ),
-                    fillColor: Colors.white,
-                    filled: true,
-                    hintText: 'Enter your Mobile Number',
-                    labelText: 'Mobile Number',
-                  ),
-                ),
-                gapH16,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                      activeColor: Colors.orange,
-                      value: ref.watch(checkboxProvider),
-                      onChanged: (value) {
-                        ref.read(checkboxProvider.notifier).changeValue(value!);
-                      },
-                    ),
-                    const Text('Are you a owner of company?')
-                  ],
-                ),
-                gapH8,
-                Visibility(
-                  visible: ref.watch(checkboxProvider),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+      body: _isloading == false
+          ? Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(gradient: appbackGroundgradent),
+              child: Container(
+                margin: EdgeInsets.only(left: 20, right: 20),
+                child: Form(
+                  key: formKeySignup,
+                  child: ListView(
+                    shrinkWrap: true,
+                    physics: BouncingScrollPhysics(),
                     children: [
+                      Text(
+                        'Full Name',
+                        style: kTextStylePoppinsTitel,
+                      ),
+                      gapH16,
+                      TextFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) {
+                          if (value!.isEmpty == true) {
+                            return 'please enter name';
+                          }
+                          return null;
+                        },
+                        controller: ref.watch(
+                          textControllerProvider('signup_name'),
+                        ),
+                        decoration: const InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColors.inputBorderColor,
+                                width: 0.5,
+                              ),
+                            ),
+                            fillColor: Colors.white,
+                            filled: true,
+                            prefixIcon: Icon(Icons.abc),
+                            hintText: 'Enter your full Name',
+                            labelText: 'Name'),
+                      ),
+                      gapH20,
+                      Text(
+                        'Email',
+                        style: kTextStylePoppinsTitel,
+                      ),
+                      gapH16,
+                      TextFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) {
+                          if (value!.isEmail != true) {
+                            return 'please enter valid email';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColors.inputBorderColor,
+                                width: 0.5,
+                              ),
+                            ),
+                            fillColor: Colors.white,
+                            filled: true,
+                            hintText: 'Enter your Email',
+                            prefixIcon: Icon(Icons.abc),
+                            labelText: 'Email'),
+                        controller: ref.watch(
+                          textControllerProvider('signup_email'),
+                        ),
+                      ),
+                      gapH20,
+                      Text(
+                        'Password',
+                        style: kTextStylePoppinsTitel,
+                      ),
+                      gapH16,
+                      TextFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) {
+                          if (value!.length < 8) {
+                            return 'password must be 8 character or more';
+                          }
+
+                          return null;
+                        },
+                        obscureText: passwordVisible,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: AppColors.inputBorderColor,
+                              width: 0.5,
+                            ),
+                          ),
+                          fillColor: Colors.white,
+                          filled: true,
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              passwordVisible
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                            onPressed: () {
+                              ref
+                                  .read(passwordProvider.notifier)
+                                  .visible(!passwordVisible);
+                            },
+                          ),
+                          hintText: 'Enter your Password',
+                          prefixIcon: const Icon(Icons.password),
+                          labelText: 'Password',
+                        ),
+                        controller: ref.watch(
+                          textControllerProvider('signup_password'),
+                        ),
+                      ),
+                      gapH20,
+                      Text(
+                        'Mobile Number',
+                        style: kTextStylePoppinsTitel,
+                      ),
+                      gapH16,
+                      TextFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) {
+                          if (value!.isEmpty == true) {
+                            return 'please enter Mobile number';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
+                        controller:
+                            ref.watch(textControllerProvider('signup_mobile')),
+                        decoration: const InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: AppColors.inputBorderColor,
+                              width: 0.5,
+                            ),
+                          ),
+                          fillColor: Colors.white,
+                          filled: true,
+                          hintText: 'Enter your Mobile Number',
+                          labelText: 'Mobile Number',
+                        ),
+                      ),
+                      gapH16,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -278,13 +264,13 @@ class _SignUpState extends ConsumerState<SignUp> {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (value!.isEmpty == true) {
-                            return 'please enter Owner name';
+                            return 'please enter employee name';
                           }
                           return null;
                         },
                         keyboardType: TextInputType.name,
-                        controller: ref
-                            .watch(textControllerProvider('signup_ownerName')),
+                        controller: ref.watch(
+                            textControllerProvider('signup_employeeName')),
                         decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -295,116 +281,150 @@ class _SignUpState extends ConsumerState<SignUp> {
                           fillColor: Colors.white,
                           filled: true,
                           prefixIcon: Icon(Icons.abc),
-                          hintText: 'Owner Name',
-                          labelText: 'Owner Name',
+                          hintText: 'Employee Name',
+                          labelText: 'Employee Name',
                         ),
                       ),
                       gapH20,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            'Designation',
-                            style: kTextStylePoppinsTitel,
+                          Checkbox(
+                            activeColor: Colors.orange,
+                            value: ref.watch(checkboxProvider),
+                            onChanged: (value) {
+                              ref
+                                  .read(checkboxProvider.notifier)
+                                  .changeValue(value!);
+                            },
                           ),
+                          const Text('Are you a employee of company?')
                         ],
                       ),
-                      gapH16,
-                      TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) {
-                          if (value!.isEmpty == true) {
-                            return 'please enter Designation';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.name,
-                        controller: ref.watch(
-                            textControllerProvider('signup_designation')),
-                        decoration: const InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColors.inputBorderColor,
-                              width: 0.5,
+                      gapH8,
+                      Visibility(
+                        visible: ref.watch(checkboxProvider),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Designation',
+                                  style: kTextStylePoppinsTitel,
+                                ),
+                              ],
                             ),
-                          ),
-                          fillColor: Colors.white,
-                          filled: true,
-                          prefixIcon: Icon(Icons.abc),
-                          hintText: 'Designation',
-                          labelText: 'Designation',
+                            gapH16,
+                            TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (value) {
+                                if (value!.isEmpty == true) {
+                                  return 'please enter Designation';
+                                }
+                                return null;
+                              },
+                              keyboardType: TextInputType.name,
+                              controller: ref.watch(
+                                  textControllerProvider('signup_designation')),
+                              decoration: const InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.inputBorderColor,
+                                    width: 0.5,
+                                  ),
+                                ),
+                                fillColor: Colors.white,
+                                filled: true,
+                                prefixIcon: Icon(Icons.abc),
+                                hintText: 'Designation',
+                                labelText: 'Designation',
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+                      gapH48,
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            _isloading = true;
+                          });
+                          signUptoFirebase(
+                                  ref.watch(
+                                    textControllerProvider('signup_email'),
+                                  ),
+                                  ref.watch(
+                                    textControllerProvider('signup_password'),
+                                  ),
+                                  context,
+                                  ref)
+                              .then((value) async {
+                            var data = UsersData(
+                              email: ref
+                                  .watch(textControllerProvider('signup_email'))
+                                  .text,
+                              mobileNumber: ref
+                                  .watch(
+                                      textControllerProvider('signup_mobile'))
+                                  .text,
+                              name: ref
+                                  .watch(textControllerProvider('signup_name'))
+                                  .text,
+                              ownerDesignation: ref
+                                  .watch(textControllerProvider(
+                                      'signup_designation'))
+                                  .text,
+                              ownerName: ref
+                                  .watch(textControllerProvider(
+                                      'signup_ownerName'))
+                                  .text,
+                              password: ref
+                                  .watch(
+                                      textControllerProvider('signup_password'))
+                                  .text,
+                              userId: value?.user?.uid,
+                            );
+                            await FirebaseFirestore.instance
+                                .collection('user_info')
+                                .doc("${data.userId}")
+                                .set(data.toJson())
+                                .then((value) {
+                              setState(() {
+                                _isloading = false;
+                              });
+                              context.pushReplacementNamed(AppRoute.home.name);
+                            });
+                          });
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          height: 50,
+                          decoration: BoxDecoration(
+                            gradient: kGradientColorOrange,
+                          ),
+                          child: Center(
+                              child: Text(
+                            "Registred",
+                            style: GoogleFonts.poppins(
+                                fontSize: 20, fontWeight: FontWeight.w600),
+                          )),
+                        ),
+                      ),
+                      gapH48,
                     ],
                   ),
                 ),
-                gapH48,
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _isloading=true;
-                    });
-                    signUptoFirebase(
-                      ref.watch(textControllerProvider('signup_email'),),
-                      ref.watch(textControllerProvider('signup_password'),),
-                      context,
-                      ref).then((value) async {
-                     var data =  UsersData(
-                        email: ref
-                            .watch(textControllerProvider('signup_email'))
-                            .text,
-                        mobileNumber: ref
-                            .watch(textControllerProvider('signup_mobile'))
-                            .text,
-                        name: ref
-                            .watch(textControllerProvider('signup_name'))
-                            .text,
-                        ownerDesignation: ref
-                            .watch(textControllerProvider('signup_designation'))
-                            .text,
-                        ownerName: ref
-                            .watch(textControllerProvider('signup_ownerName'))
-                            .text,
-                        password: ref
-                            .watch(textControllerProvider('signup_password'))
-                            .text,
-                        userId: value?.user?.uid,
-                      );
-                      await FirebaseFirestore.instance.collection('user_info').doc("${data.userId}").set(data.toJson()).then((value) {
-                        setState(() {
-                          _isloading=false;
-                        });
-                        context.pushReplacementNamed(AppRoute.home.name);
-                      });
-                    });
-
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(left: 20, right: 20),
-                    height: 50,
-                    decoration: BoxDecoration(
-                      gradient: kGradientColorOrange,
-                    ),
-                    child: Center(
-                        child: Text(
-                      "Registred",
-                      style: GoogleFonts.poppins(
-                          fontSize: 20, fontWeight: FontWeight.w600),
-                    )),
-                  ),
-                ),
-                gapH48,
-              ],
-            ),
-          ),
-        ),
-      ):Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(gradient: appbackGroundgradent),
-
-          child: Center(child: CircularProgressIndicator())),
+              ),
+            )
+          : Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(gradient: appbackGroundgradent),
+              child: Center(child: CircularProgressIndicator())),
     );
   }
 }

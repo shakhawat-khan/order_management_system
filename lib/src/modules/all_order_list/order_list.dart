@@ -39,7 +39,7 @@ class _OrderListState extends ConsumerState<OrderList> {
           .where('user_id', isEqualTo: user!.uid)
           .snapshots()
           .listen((event) {
-            print("the event is ....${event}");
+        print("the event is ....${event}");
         mapRecords(event);
       });
     }
@@ -62,7 +62,8 @@ class _OrderListState extends ConsumerState<OrderList> {
   }
 
   void mapRecords(QuerySnapshot<Map<String, dynamic>> records) {
-    print("the recods is.........${records.docs.map((e) =>e["productImage"])}");
+    print(
+        "the recods is.........${records.docs.map((e) => e["productImage"])}");
     var list = records.docs
         .map(
           (order) => Orders(
@@ -77,7 +78,7 @@ class _OrderListState extends ConsumerState<OrderList> {
             imagePath: order['image_path'],
             rawMaterial: order['raw_material'],
             userId: order['user_id'],
-          productImage: order['productImage'],
+            productImage: order['productImage'],
           ),
         )
         .toList();
@@ -125,7 +126,8 @@ class _OrderListState extends ConsumerState<OrderList> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          NavUtils.push(context, OrderDetails(totalOrders[index]));
+                          NavUtils.push(
+                              context, OrderDetails(totalOrders[index]));
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width,
@@ -183,8 +185,7 @@ class _OrderListState extends ConsumerState<OrderList> {
                                                   color: AppColors
                                                       .listItemfontsmalColor,
                                                   fontSize: 12,
-                                                  fontWeight:
-                                                      FontWeight.w300),
+                                                  fontWeight: FontWeight.w300),
                                             )),
                                         SizedBox(
                                           height: 10,
@@ -201,13 +202,19 @@ class _OrderListState extends ConsumerState<OrderList> {
                                     )),
                               ),
                               IconButton(
+                                icon: Image.asset(
+                                  "assets/ic-delete.png",
+                                  height: 25,
+                                  width: 25,
+                                  fit: BoxFit.contain,
+                                ),
+                                onPressed: () {
+                                  deleteItem(totalOrders[index].orderId);
 
-                                  icon: Image.asset("assets/ic-delete.png",height: 25,width: 25,fit: BoxFit.contain,), onPressed: () {
-                                deleteItem(totalOrders[index].orderId);
-
-                                print(totalOrders[index].orderId);
-                                print('hello');
-                              },),
+                                  print(totalOrders[index].orderId);
+                                  print('hello');
+                                },
+                              ),
                               SizedBox(
                                 width: 30,
                               )

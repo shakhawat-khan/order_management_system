@@ -33,18 +33,18 @@ class _HomePageState extends State<HomePage> {
       key: scaffoldKey,
       drawer: CustomDrawer(email: 'email'),
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            if (scaffoldKey.currentState!.isDrawerOpen) {
-              scaffoldKey.currentState!.closeDrawer();
-              //close drawer, if drawer is open
-            } else {
-              scaffoldKey.currentState!.openDrawer();
-              //open drawer, if drawer is closed
-            }
-          },
-          icon: Image.asset("assets/ic-drawer.png"),
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     if (scaffoldKey.currentState!.isDrawerOpen) {
+        //       scaffoldKey.currentState!.closeDrawer();
+        //       //close drawer, if drawer is open
+        //     } else {
+        //       scaffoldKey.currentState!.openDrawer();
+        //       //open drawer, if drawer is closed
+        //     }
+        //   },
+        //   icon: Image.asset("assets/ic-drawer.png"),
+        // ),
         title: Image.asset("assets/ic-logo.png"),
         centerTitle: true,
         flexibleSpace: Container(
@@ -72,26 +72,32 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: Color(0xff354CD8), //Colors.cyan,
               child: ClipOval(
                   child: Image.asset(
-                    "assets/image-person.png",
-                    fit: BoxFit.cover,
-                    height: 35,
-                    width: 35,
-                  )),
+                "assets/image-person.png",
+                fit: BoxFit.cover,
+                height: 35,
+                width: 35,
+              )),
             ),
             itemBuilder: (BuildContext context) {
-
               return [
                 PopupMenuItem<int>(
                   value: 0,
                   onTap: () {
-                    _perfService.removeCache('password').whenComplete(
-                            () => context.pushReplacementNamed(AppRoute.logIn.name));
+                    _perfService.removeCache('password').whenComplete(() =>
+                        context.pushReplacementNamed(AppRoute.logIn.name));
                   },
-                  child:  Row(
+                  child: Row(
                     children: [
-                      SizedBox(width: 15,),
-                      Icon(Icons.logout,size: 22,),
-                      SizedBox(width: 10,),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Icon(
+                        Icons.logout,
+                        size: 22,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
                       Text("Log Out"),
                     ],
                   ),
@@ -155,7 +161,6 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-
             ],
           ),
         ),
