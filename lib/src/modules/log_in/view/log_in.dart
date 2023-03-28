@@ -23,6 +23,7 @@ class LogIn extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final passwordVisible = ref.watch(passwordProvider);
+    bool _isLoading = false;
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -37,7 +38,7 @@ class LogIn extends ConsumerWidget {
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),
-      body: Container(
+      body: _isLoading==false?Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(gradient: appbackGroundgradent),
@@ -187,12 +188,15 @@ class LogIn extends ConsumerWidget {
                               ),
                               onPressed: () {
                                 if (formKeyLogin.currentState!.validate()) {
+                                  _isLoading=true;
                                   signIntoFirebase(
                                       ref.watch(textControllerProvider(
                                           'login_email')),
                                       ref.watch(textControllerProvider(
                                           'login_password')),
-                                      context);
+                                      context).then((value) {
+                                        _isLoading=false;
+                                  });
                                 } else {
                                   //print(user);
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -249,7 +253,11 @@ class LogIn extends ConsumerWidget {
             ),
           ),
         ),
-      ),
+      ):Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(gradient: appbackGroundgradent),
+          child: Center(child: CircularProgressIndicator())),
     );
   }
 }

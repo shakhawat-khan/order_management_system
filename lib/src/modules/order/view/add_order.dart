@@ -465,45 +465,50 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               _isLoading =true;
                             });
                             if(ref.read(pickImageProvider).length>0){
-                              uploadImage(ref.read(pickImageProvider)).then((value) {
-                                print("the total array size is ${value}");
-                                var data =  Orders(
-                                    orderId: '',
-                                    allocatedJob: ref.read(dropdown2Provider)!,
-                                    categoryName: ref.read(dropdown1Provider)!,
-                                    contactPersonName: ref
-                                        .read(textControllerProvider(
-                                      'contact_person_name',
-                                    ))
-                                        .text,
-                                    contactPersonNumber: ref
-                                        .read(textControllerProvider(
-                                      'contact_person_number',
-                                    ))
-                                        .text,
-                                    details: ref
-                                        .read(textControllerProvider(
-                                      'order_description',
-                                    ))
-                                        .text,
-                                    startDate: '${ref.read(textControllerProvider('start_date')).text}',
-                                    endDate: '${ref.read(textControllerProvider('end_date')).text}',
-                                    imagePath: 'test',
-                                    rawMaterial: ref
-                                        .read(textControllerProvider(
-                                      'order_rawMaterial',
-                                    ))
-                                        .text,
-                                    userId: user!.uid.toString(),
-                                    productImage:downlaodImages);
+                              print("the details value is ......${ref.read(textControllerProvider('order_description',)).text}");
+                              print("the raw materals  value is ......${ref.read(textControllerProvider('order_rawMaterial',)).text}");
+                              String details = ref.read(textControllerProvider('order_description',)).text;
+                              String rawDetails = ref.read(textControllerProvider('order_rawMaterial',)).text;
+                              String allocatedJob=ref.read(dropdown2Provider)!;
+                              String categoryName=ref.read(dropdown1Provider)!;
+                              String contactPersonName=ref.read(textControllerProvider('contact_person_name',)).text;
+                              String contactPersonNumber= ref.read(textControllerProvider('contact_person_number',)).text;
+                              String startDate='${ref.read(textControllerProvider('start_date')).text}';
+                              String endDate='${ref.read(textControllerProvider('end_date')).text}';
+                              String imagePath;
+                              String rawMaterial;
+                              String orderId;
+                              String userId;
+                              List<dynamic>productImage;
+                              bool isOrderCancel;
+                              await uploadImage(ref.read(pickImageProvider)).whenComplete(() async {
 
+                                //print("the total array size is ${value}");
+                                print("the details value inside is ......${details}");
+                                print("the raw materals  value inside is ......${rawDetails}");
+                               var data = Orders(
+                                  orderId: '',
+                                  allocatedJob: allocatedJob,
+                                  categoryName: categoryName,
+                                  contactPersonName: contactPersonName,
+                                  contactPersonNumber:contactPersonNumber,
+                                  details: details,
+                                  startDate: startDate,
+                                  endDate: endDate,
+                                  imagePath: 'test',
+                                  rawMaterial: rawDetails,
+                                  userId: user!.uid.toString(),
+                                  productImage: downlaodImages,
+                                  isOrderCancel: false,
+
+                                );
                                 print("data formate ....${data.toJson()}");
-                                FirebaseFirestore.instance.collection('orders').add(data.toJson()).then((value) {
+                                await FirebaseFirestore.instance.collection('orders').add(data.toJson()).then((value) {
                                   _isLoading =true;
                                   context.pop(AppRoute.orderList.name);
                                 });
@@ -536,7 +541,10 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                                     'order_rawMaterial',
                                   ))
                                       .text,
-                                  userId: user!.uid.toString(), productImage: ["asdfasdf","asdfasdf"],
+                                  userId: user!.uid.toString(),
+                                productImage: [],
+                                isOrderCancel: false,
+
                                   );
 
                               print("data formate ....${data.toJson()}");

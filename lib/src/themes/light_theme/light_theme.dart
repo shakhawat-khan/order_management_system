@@ -11,4 +11,6 @@ ThemeData get lightTheme => ThemeData(
         ColorScheme.light(primary: Colors.blue, secondary: Colors.blueAccent),
     useMaterial3: true,
     elevatedButtonTheme: elevatedButtonTheme,
-    inputDecorationTheme: textFieldTheme);
+    inputDecorationTheme: textFieldTheme,
+
+);

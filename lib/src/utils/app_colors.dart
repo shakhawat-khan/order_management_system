@@ -17,4 +17,6 @@ class AppColors {
   static var redButtonBackColor = Color(0xffFF0000);
   static var defaultColor = Color(0xff6F6E6E);
 
+  static var whitecolor = Color(0xffFFFFFF);
+
 }

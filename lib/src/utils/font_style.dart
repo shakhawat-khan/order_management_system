@@ -59,3 +59,8 @@ final bottomNavigationBackgroundGradient = LinearGradient(
   end: Alignment(0, 1),
   colors: [AppColors.bottomNavigationBackgrundStart, AppColors.bottomNavigationBackgrundEnd],
 );
+final bottomNavigationBackgroundGradientfakse = LinearGradient(
+  begin: Alignment(0, -1),
+  end: Alignment(0, 1),
+  colors: [AppColors.whitecolor, AppColors.whitecolor],
+);

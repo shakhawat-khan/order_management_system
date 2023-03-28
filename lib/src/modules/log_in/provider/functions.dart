@@ -1,14 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../routing/app_route.dart';
 import '../../../services/share_pref.dart';
-
-void signIntoFirebase(TextEditingController emailController,
-    TextEditingController passwordController, BuildContext context) async {
+bool isSuccess=false;
+Future<bool> signIntoFirebase(TextEditingController emailController, TextEditingController passwordController, BuildContext context) async {
   try {
     final user = FirebaseAuth.instance.currentUser;
 
@@ -26,14 +26,42 @@ void signIntoFirebase(TextEditingController emailController,
 
         _perfService.createCache('password').whenComplete(
           () {
-            context.goNamed(
-              AppRoute.home.name,
-            );
+
+
+            if (user!.uid == '8CPgxNn0WiPXk1eFgSh10FkZjNJ2') {
+              Fluttertoast.showToast(
+                  msg: " Admin Log In success",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.green,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+
+              // _perfService.createCache(password)
+              holdCache('admin');
+            } else {
+              Fluttertoast.showToast(
+                msg: " User Log In success",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              );
+              holdCache('user');
+            }
+
+
+            context.goNamed(AppRoute.home.name,);
+            isSuccess =true;
+            return isSuccess;
           },
         );
-
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: Colors.green, content: Text("sign up success")));
+        return isSuccess;
+        /*ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            backgroundColor: Colors.green, content: Text("sign up success")));*/
       }
     }
   } on FirebaseAuthException catch (e) {
@@ -52,5 +80,15 @@ void signIntoFirebase(TextEditingController emailController,
         ),
       );
     }
+    isSuccess=false;
+    return isSuccess;
   }
+  return isSuccess;
+}
+
+holdCache(String value) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String person = '';
+  person = value;
+  prefs.setString('person', person);
 }

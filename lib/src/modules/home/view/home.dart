@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:order_management_system/src/constants/app_sizes.dart';
 import 'package:order_management_system/src/modules/home/components/drawer.dart';
@@ -7,6 +9,7 @@ import 'package:order_management_system/src/modules/order/view/add_order.dart';
 import 'package:order_management_system/src/routing/app_route.dart';
 import 'package:order_management_system/src/utils/app_colors.dart';
 import 'package:order_management_system/src/utils/font_style.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../components/pie_chart.dart';
 import '../../../components/title_circle.dart';
@@ -27,26 +30,34 @@ class _HomePageState extends State<HomePage> {
   PrefService _perfService = PrefService();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+
+  String person = '';
+  final user = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+
+    // TODO: implement initState
+    super.initState();
+  }
+
+
+  holdCache(String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      person = value;
+    });
+    prefs.setString('person', person);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
       drawer: CustomDrawer(email: 'email'),
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            if (scaffoldKey.currentState!.isDrawerOpen) {
-              scaffoldKey.currentState!.closeDrawer();
-              //close drawer, if drawer is open
-            } else {
-              scaffoldKey.currentState!.openDrawer();
-              //open drawer, if drawer is closed
-            }
-          },
-          icon: Image.asset("assets/ic-drawer.png"),
-        ),
-        title: Image.asset("assets/ic-logo.png"),
-        centerTitle: true,
+        leading:Image.asset("assets/ic-logo.png"),
+       /* title: Image.asset("assets/ic-logo.png"),
+        centerTitle: true,*/
         flexibleSpace: Container(
           decoration: BoxDecoration(gradient: appbackGroundgradent),
         ),
@@ -71,12 +82,7 @@ class _HomePageState extends State<HomePage> {
             icon: CircleAvatar(
               backgroundColor: Color(0xff354CD8), //Colors.cyan,
               child: ClipOval(
-                  child: Image.asset(
-                    "assets/image-person.png",
-                    fit: BoxFit.cover,
-                    height: 35,
-                    width: 35,
-                  )),
+                  child: Icon(Icons.person,size: 35,color: Colors.white,)),
             ),
             itemBuilder: (BuildContext context) {
 
@@ -93,6 +99,21 @@ class _HomePageState extends State<HomePage> {
                       Icon(Icons.logout,size: 22,),
                       SizedBox(width: 10,),
                       Text("Log Out"),
+                    ],
+                  ),
+                ),
+                PopupMenuItem<int>(
+                  value: 0,
+                  onTap: () {
+                    /*_perfService.removeCache('password').whenComplete(
+                            () => context.pushReplacementNamed(AppRoute.logIn.name));*/
+                  },
+                  child:  Row(
+                    children: [
+                      SizedBox(width: 15,),
+                      Icon(Icons.person,size: 22,),
+                      SizedBox(width: 10,),
+                      Text("Profile"),
                     ],
                   ),
                 ),

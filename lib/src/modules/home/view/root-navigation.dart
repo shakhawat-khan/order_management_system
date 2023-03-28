@@ -20,7 +20,6 @@ class _RootNavigationState extends State<RootNavigation> {
 
   final tabs = [
     HomePage(),
-    Center(child: Text("comming soon")),
     OrderList(),
   ];
   @override
@@ -61,14 +60,12 @@ class _RootNavigationState extends State<RootNavigation> {
         selectedIconTheme: IconThemeData(color: Colors.white),
         items: [
           BottomNavigationBarItem(
-            icon: Image.asset("assets/ic-nav-market.png"),
-            label: "Market",
+            icon: Icon(Icons.home,color: Colors.white,size: 21,),
+            label: "Dash Board",
           ),
           BottomNavigationBarItem(
-              icon: Image.asset("assets/ic-nav-trade.png"), label: "Trade"),
-          BottomNavigationBarItem(
-            icon: Image.asset("assets/ic-nav-wallet.png"),
-            label: "Wallet",
+            icon: Icon(Icons.fact_check_outlined,color: Colors.white,size: 21,),//Image.asset("assets/ic-nav-wallet.png"),
+            label: "Crafting",
           ),
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:order_management_system/src/extensions/extensions.dart';
@@ -14,8 +15,10 @@ import 'package:order_management_system/src/utils/app_colors.dart';
 import '../../../components/logo_ekopii.dart';
 import '../../../constants/app_sizes.dart';
 import '../../../provider/providers.dart';
+import '../../../services/share_pref.dart';
 import '../../../utils/font_style.dart';
 import '../../../utils/key.dart';
+import '../../../extensions/extensions.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SignUp extends ConsumerStatefulWidget {
@@ -150,6 +153,7 @@ class _SignUpState extends ConsumerState<SignUp> {
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
+
                     if (value!.isEmail != true) {
                       return 'please enter valid email';
                     }
@@ -255,88 +259,91 @@ class _SignUpState extends ConsumerState<SignUp> {
                         ref.read(checkboxProvider.notifier).changeValue(value!);
                       },
                     ),
-                    const Text('Are you a owner of company?')
+                    const Text('Are you a employee?')
                   ],
                 ),
                 gapH8,
-                Visibility(
-                  visible: ref.watch(checkboxProvider),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Company Name',
-                            style: kTextStylePoppinsTitel,
-                          ),
-                        ],
-                      ),
-                      gapH16,
-                      TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) {
-                          if (value!.isEmpty == true) {
-                            return 'please enter Owner name';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.name,
-                        controller: ref
-                            .watch(textControllerProvider('signup_ownerName')),
-                        decoration: const InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColors.inputBorderColor,
-                              width: 0.5,
-                            ),
-                          ),
-                          fillColor: Colors.white,
-                          filled: true,
-                          prefixIcon: Icon(Icons.abc),
-                          hintText: 'Owner Name',
-                          labelText: 'Owner Name',
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Company Name',
+                          style: kTextStylePoppinsTitel,
                         ),
-                      ),
-                      gapH20,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Designation',
-                            style: kTextStylePoppinsTitel,
+                      ],
+                    ),
+                    gapH16,
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+
+                        if (value!.isEmpty == true) {
+                          return 'please enter company name';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.name,
+                      controller: ref
+                          .watch(textControllerProvider('signup_ownerName')),
+                      decoration: const InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppColors.inputBorderColor,
+                            width: 0.5,
                           ),
-                        ],
-                      ),
-                      gapH16,
-                      TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) {
-                          if (value!.isEmpty == true) {
-                            return 'please enter Designation';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.name,
-                        controller: ref.watch(
-                            textControllerProvider('signup_designation')),
-                        decoration: const InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColors.inputBorderColor,
-                              width: 0.5,
-                            ),
-                          ),
-                          fillColor: Colors.white,
-                          filled: true,
-                          prefixIcon: Icon(Icons.abc),
-                          hintText: 'Designation',
-                          labelText: 'Designation',
                         ),
+                        fillColor: Colors.white,
+                        filled: true,
+                        prefixIcon: Icon(Icons.abc),
+                        hintText: 'Company Name',
+                        labelText: 'Company Name',
                       ),
-                    ],
-                  ),
+                    ),
+                    gapH20,
+                   Visibility(
+                     visible: ref.watch(checkboxProvider),
+                     child: Column(children: [
+                       Row(
+                         mainAxisAlignment: MainAxisAlignment.start,
+                         children: [
+                           Text(
+                             'Designation',
+                             style: kTextStylePoppinsTitel,
+                           ),
+                         ],
+                       ),
+                       gapH16,
+                       TextFormField(
+                         autovalidateMode: AutovalidateMode.onUserInteraction,
+                         validator: (value) {
+                           if (value!.isEmpty == true) {
+                             return 'please enter Designation';
+                           }
+                           return null;
+                         },
+                         keyboardType: TextInputType.name,
+                         controller: ref.watch(
+                             textControllerProvider('signup_designation')),
+                         decoration: const InputDecoration(
+                           enabledBorder: OutlineInputBorder(
+                             borderSide: BorderSide(
+                               color: AppColors.inputBorderColor,
+                               width: 0.5,
+                             ),
+                           ),
+                           fillColor: Colors.white,
+                           filled: true,
+                           prefixIcon: Icon(Icons.abc),
+                           hintText: 'Designation',
+                           labelText: 'Designation',
+                         ),
+                       ),
+                     ],),
+                   )
+                  ],
                 ),
                 gapH48,
                 InkWell(
@@ -374,7 +381,22 @@ class _SignUpState extends ConsumerState<SignUp> {
                         setState(() {
                           _isloading=false;
                         });
-                        context.pushReplacementNamed(AppRoute.home.name);
+                        PrefService _perfService = PrefService();
+
+                        _perfService.createCache('password').whenComplete(
+                              () {
+                                Fluttertoast.showToast(
+                                  msg: " User Log In success",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.green,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0,
+                                );
+                            context.goNamed(AppRoute.home.name,);
+                          },
+                        );
                       });
                     });
 

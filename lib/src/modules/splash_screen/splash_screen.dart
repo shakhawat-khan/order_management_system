@@ -1,7 +1,14 @@
 import 'dart:async';
 
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
+import 'package:order_management_system/src/modules/home/view/home.dart';
+import 'package:order_management_system/src/modules/log_in/view/log_in.dart';
+import 'package:order_management_system/src/utils/app_colors.dart';
+import 'package:order_management_system/src/utils/nav_utils.dart';
 
 import '../../routing/app_route.dart';
 import '../../services/share_pref.dart';
@@ -14,37 +21,111 @@ class Splash extends StatefulWidget {
   _SplashState createState() => _SplashState();
 }
 
-class _SplashState extends State<Splash> {
+class _SplashState extends State<Splash> with TickerProviderStateMixin{
   @override
   void initState() {
     // TODO: implement initState
+    _animationController = AnimationController(vsync: this,duration: Duration(microseconds: 100));
+    _animationController.forward();
+
     _flashDuration();
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  late final AnimationController _animationController;
   _flashDuration() async {
-    await Future.delayed(Duration(milliseconds: 1200), () {
-      final PrefService _prefService = PrefService();
+    await Future.delayed(Duration(milliseconds: 1000), () {
 
-      //context.goNamed(AppRoute.startScreen.name);
+      setState(() {
+        visiboel=false;
+        _Navigaton();
+      });
 
-      _prefService.readCache("password").then((value) {
-        print(value);
-        if (value != null) {
-          print('if');
-          return context.pushReplacementNamed(AppRoute.home.name);
-        } else {
-          return context.pushReplacementNamed(AppRoute.logIn.name);
-        }
 
-        //context.pushReplacementNamed(AppRoute.startScreen.name);
+
+
+    });
+  }
+
+  _Navigaton()async{
+   await  Future.delayed(Duration(milliseconds: 1500),(){
+      setState(() {
+        final PrefService _prefService = PrefService();
+
+        //context.goNamed(AppRoute.startScreen.name);
+
+        _prefService.readCache("password").then((value) {
+          print(value);
+          if (value != null) {
+            print('if');
+            return context.pushReplacementNamed(AppRoute.home.name);
+          } else {
+            return context.pushReplacementNamed(AppRoute.logIn.name);
+          }
+
+          //context.pushReplacementNamed(AppRoute.startScreen.name);
+        });
       });
     });
   }
 
+  bool visiboel=true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      body: Center(child: AnimatedContainer(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          color: visiboel==true?Colors.white:Colors.red,
+          gradient: visiboel==false?LinearGradient(
+            colors: [
+              AppColors.bottomNavigationBackgrundStart,
+              AppColors.bottomNavigationBackgrundEnd
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.0, 0.8],
+            tileMode: TileMode.clamp,
+          ):bottomNavigationBackgroundGradientfakse
+        ),
+        duration: Duration(milliseconds: 500),
+        curve: Curves.fastOutSlowIn,
+        child: Stack(
+          alignment: Alignment.center,
+
+          children: [
+
+
+            visiboel==false? Positioned(
+              top: MediaQuery.of(context).size.height/2+30,
+                child: Center(child: Text("Crafter",style: GoogleFonts.fasthand(fontSize: 28, fontWeight: FontWeight.w500,color: Colors.white),)),
+            ):SizedBox(),
+            Positioned(
+              top: MediaQuery.of(context).size.height/2+20,
+
+                child: Visibility(
+                    visible: visiboel,
+                    child: Image.asset("assets/ic-circule.png",fit: BoxFit.contain,))),
+            Lottie.asset("assets/logo-lotti.json", width: 60,height:60,filterQuality:FilterQuality.high,fit: BoxFit.fitWidth,repeat: false,),
+
+
+
+
+          ],
+        ),
+      )),
+    );
+
+    /* Scaffold(
       body: Column(
         children: [
           Expanded(
@@ -69,9 +150,7 @@ class _SplashState extends State<Splash> {
                     height: 50,
                     child: FittedBox(
                       fit: BoxFit.cover,
-                      child: Image.asset(
-                        "assets/ekopii.png",
-                      ),
+                      child: Image.asset("assets/ekopii.png",),
                     ),
                   ),
                 ),
@@ -133,7 +212,7 @@ class _SplashState extends State<Splash> {
           ),
         ],
       ),
-    );
+    );*/
   }
 }
 

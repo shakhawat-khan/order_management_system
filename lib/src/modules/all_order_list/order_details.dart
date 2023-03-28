@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,6 +32,7 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   }
    int activePage =0;
+  bool _isLoading=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +52,7 @@ class _OrderDetailsState extends State<OrderDetails> {
           ),
         ),
       ),
-      body: Container(
+      body:_isLoading==false? Container(
         height: MediaQuery.of(context).size.height,
 
         decoration: BoxDecoration(
@@ -75,7 +77,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                   itemBuilder: (context,item){
                   return Container(
 
-                    child: Image.network("${widget.orders.productImage[item]}"),);
+                    child: CachedNetworkImage(imageUrl: '${widget.orders.productImage[item]}',
+                    errorWidget: (url,cotext,error)=>Image.asset("assets/noimage.jpg"),
+                    ));
                   }
               ),
             ),
@@ -222,8 +226,16 @@ class _OrderDetailsState extends State<OrderDetails> {
                             SizedBox(height: 30,),
                             GestureDetector(
                               onTap: (){
-                                FirebaseFirestore.instance.collection('orders').doc(widget.orders.orderId).delete();
-                                Navigator.pop(context);
+                               // FirebaseFirestore.instance.collection('orders').doc(widget.orders.orderId).delete();
+                                setState(() {
+                                  _isLoading=true;
+                                });
+                                FirebaseFirestore.instance.collection('orders').doc(widget.orders.orderId)
+                                    .update({'isOrderCancel': true}).then((value) {
+                                      _isLoading=false;
+                                  Navigator.pop(context);
+                                });
+
                               },
                               child: Container(
                                 height: 50,
@@ -251,7 +263,13 @@ class _OrderDetailsState extends State<OrderDetails> {
             )
           ],
         ),
-      ),
+      ):Container(
+          height: MediaQuery.of(context).size.height,
+
+          decoration: BoxDecoration(
+              gradient: appbackGroundgradent
+          ),
+          child: Center(child: CircularProgressIndicator())),
     );
   }
 

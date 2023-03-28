@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../extensions/extensions.dart';
 
 final ImagePicker picker = ImagePicker();
 
@@ -25,6 +26,7 @@ Future<List<XFile?>> pickImageFromGallery() async {
 
 Future<DateTime> selectDate(BuildContext context) async {
   DateTime selectedDate = DateTime.now();
+
   final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,

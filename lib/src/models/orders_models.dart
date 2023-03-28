@@ -22,6 +22,7 @@ class Orders {
     required this.orderId,
     required this.userId,
      required this.productImage,
+     required this.isOrderCancel,
   });
 
   String allocatedJob;
@@ -36,6 +37,7 @@ class Orders {
   String orderId;
   String userId;
   List<dynamic>productImage;
+  bool isOrderCancel;
 
 
   factory Orders.fromJson(Map<String, dynamic> json) => Orders(
@@ -51,6 +53,7 @@ class Orders {
         orderId: json["order_id"],
         userId: json["user_id"],
         productImage: json["productImage"],
+    isOrderCancel: json["isOrderCancel"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -66,5 +69,6 @@ class Orders {
         "order_id": orderId,
         "user_id": userId,
         "productImage": productImage,
+        "isOrderCancel": isOrderCancel,
       };
 }
